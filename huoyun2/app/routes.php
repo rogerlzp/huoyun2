@@ -58,6 +58,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	
 	Route::get('testsms/yimei2', 'TestYimeiController@showWelcome2');
 	Route::get('test/attach1', 'TestYimeiController@testAttach');
+	Route::get('test/xinge1', 'TestYimeiController@testXinge');
 	
 	# create horder
 	Route::post('createHorder/fmobile', 'HorderController@postCreateHorderFromMobile');
