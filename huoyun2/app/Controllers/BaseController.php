@@ -31,9 +31,14 @@ class BaseController extends Controller
         			  'postCreateHorderFromMobile',
         			  'postUpdateTruckDriverFromMobile',
         			  'postUpdateDriverLicenseImageFromMobile',
-        			  'postGetTruckInfoFromMobile'
+        			  'postGetTruckInfoFromMobile',
+        			  'getMyHorderFromMobile',
+        			  'getTrucksFromMobile',
+        			  'updateUserPortraitFromMobile',
+        			  'postUserProfileFromMobile'
         		)));
     }
+    
 
     /**
      * Setup the layout used by the controller.

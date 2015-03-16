@@ -37,6 +37,18 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 		return $this->model->orderBy ( 'created_at', 'desc' )->paginate ( $perPage );
 	}
 	
+	
+	//TODO: 加入其他条件
+	public function findAll($offset, $perPage = 10 ) {
+		Log::info("offset=".$offset);
+		Log::info("perPage=".$perPage);
+		return $this->model->orderBy('created_at', 'desc')
+						   ->skip($offset)
+						   ->take($perPage)
+						   ->get();
+	}
+	 
+	
 	public function findById($id){
 		return $this->model->whereId($id)->first();
 	}

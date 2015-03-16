@@ -43,11 +43,9 @@ class CreateHordersTable extends Migration {
 			$table->string('horder_desc');
 			
 			$table->integer('user_id')->unsigned();
-			$table->integer('status_id')->unsigned();
+			$table->integer('status')->default(0);
 			
 			$table->foreign('user_id')->references('id')->on('users')
-			->onUpdate('cascade')->onDelete('cascade');
-			$table->foreign('status_id')->references('id')->on('horder_status')
 			->onUpdate('cascade')->onDelete('cascade');
 			
 			$table->timestamps();

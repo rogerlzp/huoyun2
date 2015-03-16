@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 use Huoyun\Services\Forms\SettingsForm;
 use Huoyun\Services\Forms\RegistrationForm;
@@ -27,6 +28,21 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         $this->model = $user;
     }
 
+    
+    public function getProfileFromMobile(array $data) {
+    	$user = $this->model->whereId($data['user_id'])->first();
+    	Log::info('user='.$user);
+    	Log::info('user info ='.$user->profile()->first());
+    	return $user;
+    }
+    
+    public function getProfileFromMobileByMobile($mobile) {
+    	$user = $this->model->whereMobile($mobile)->first();
+    	Log::info('user='.$user);
+    	Log::info('user info ='.$user->profile()->first());
+    	return $user;
+    }
+    
     /**
      * Find all users paginated.
      *

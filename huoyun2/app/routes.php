@@ -32,6 +32,9 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	Route::post('verify/fmobile', 'AuthController@postVerifyFromMobile');
 	Route::post('login/fmobile', 'AuthController@postLoginFromMobile');
 	
+	Route::post('getMyHorder/fmobile', 'HorderController@getMyHorderFromMobile');
+	Route::post('getHorder/fmobile', 'AuthController@getHorderFromMobile');
+	
 	// driver register
 	Route::post('registerDriver/fmobile', 'AuthController@postRegisterDriverFromMobile');
 	
@@ -50,6 +53,11 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	// update driver license image 
 	Route::post('updateDriverLicense/fmobile', 'TruckController@postUpdateDriverLicenseImageFromMobile');
 	
+	// get user profile
+	Route::post('getUserProfile/fmobile', 'UserController@postUserProfileFromMobile');
+	// update user portrait
+	Route::post('updateUserPortrait/fmobile', 'UserController@updateUserPortraitFromMobile');
+	
 	# user
 	Route::get('user', [ 'as' => 'user.index', 'uses' => 'UserController@getIndex' ]);
 	
@@ -62,6 +70,9 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	
 	# create horder
 	Route::post('createHorder/fmobile', 'HorderController@postCreateHorderFromMobile');
+	
+	Route::post('getTrucks/fmobile', 'TruckController@getTrucksFromMobile');
 
 	
 });
+

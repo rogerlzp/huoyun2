@@ -2,6 +2,7 @@
 
 use Huoyun\Models\User;
 use Huoyun\Models\Profile;
+use Illuminate\Support\Facades\Log;
 use Huoyun\Repositories\ProfileRepositoryInterface;
 
 class ProfileRepository extends AbstractRepository implements ProfileRepositoryInterface
@@ -25,7 +26,7 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryI
      */
     public function findById($uid)
     {
-        return $this->model->whereId($id)->first();
+        return $this->model->whereId($uid)->first();
     }
 
     
@@ -42,5 +43,23 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryI
         $profile->save();
 
         return $profile;
+    }
+    
+    public function createOrUpdateUserPortraitFromMobile(array $data) {
+    	// 首先查找profile
+    	$profile = $this->findById($data['user_id']);
+    	if (!$profile) {
+    		$profile = $this->getNew ();
+    		$profile->created_at = new \DateTime ();
+    		Log::info("add new truck");
+    	} 
+    	$profile->user_id = $data ['user_id'];
+    	$profile->company_id = 0;// TODO 
+    	$profile->profile_image_url = e ( $data ['profile_image_url'] );
+  
+    	$profile->updated_at = new \DateTime ();
+    	
+    	$profile->save ();
+    	return $profile;
     }
 }

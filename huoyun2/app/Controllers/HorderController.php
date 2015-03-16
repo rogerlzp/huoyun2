@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 use Huoyun\Repositories\HorderRepositoryInterface;
 
 use Hardywen\Yimei\Facades\YimeiFacade;
+use Huoyun\Repositories\Eloquent\UserRepository;
+use Huoyun\Repositories\UserRepositoryInterface;
 
 class HorderController extends BaseController
 {
@@ -16,6 +18,11 @@ class HorderController extends BaseController
      * @var \Huoyun\Repositories\HorderRepositoryInterface
      */
     protected $horders;
+    
+    /**
+     * User Repository
+     */
+    protected $users;
 
     /**
      * Create a new AuthController instance.
@@ -23,10 +30,11 @@ class HorderController extends BaseController
      * @param  \Tricks\Repositories\UserRepositoryInterface $users
      * @return void
      */
-    public function __construct(HorderRepositoryInterface $horders)
+    public function __construct(HorderRepositoryInterface $horders, UserRepositoryInterface $users)
     {
         parent::__construct();
         $this->horders = $horders;
+        $this->users = $users;
       
     }
    
@@ -76,5 +84,25 @@ class HorderController extends BaseController
     	}
     	
     }
+    
+    /**
+     * Get My Horder.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function getMyHorderFromMobile()
+    {
+    	Log::info("getMyHorderFromMobile");  	 
+    	$userId= Input::get('user_id');
+    	$status = Input::get('horder_status');
+    	$offset = Input::get('offset');
+    	$pagecount = Input::get('pagecount');
+    	
+    	$horders = $this->horders->findByStatus($userId, $status, $offset, $pagecount);
+    	Log::info('horders='.$horders);
+    	return json_encode(array('result_code'=>'0', 'horders'=>$horders));
+    
+    } 
+    
 
 }

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Log;
 
 use Huoyun\Services\Forms\SettingsForm;
 use Huoyun\Services\Forms\RegistrationForm;
@@ -42,9 +43,25 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
                     ->paginate($perPage);
     }
 
-
-
-
+    
+    /**
+     * Find the horder created by the user with the given status
+     * 0: 创造订单，等待车主接货
+     * 1: 车主已经接单
+     * 2: 已经完成
+     */
+    public function findByStatus($user_id, $status, $offset, $perPage = 10 ) {
+    	Log::info("offset=".$offset);
+    	Log::info("perPage=".$perPage);
+    	return $this->model->where('user_id', '=',  $user_id )
+    					   ->where('status', '=',  $status)
+    	                   ->orderBy('created_at', 'desc')
+    	                   ->skip($offset)
+    	                   ->take($perPage) 	               
+    	                   ->get();
+    	               //    ->paginate($perPage);
+    	  
+    }
    
 
     /**
@@ -59,7 +76,7 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
         
 
         $horder->user_id    = $data['user_id'];
-        $horder->status_id    = 0;
+        $horder->status    = 0;
         $horder->shipper_username    = e($data['shipper_username']);
         $horder->shipper_date    = $data['shipper_date'];
         $horder->shipper_address_code    = e($data['shipper_address_code']);

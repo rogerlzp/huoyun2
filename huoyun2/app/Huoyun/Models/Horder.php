@@ -71,5 +71,16 @@ class Horder extends Model
 	//	return $this->hasMany('Tricks\Torder');
 	}
 	
+
+	
+	
+	/**
+	 * 创建该 horder 的用户
+	 */
+	public function user()
+	{
+		return $this->belongsTo('Huoyun\Models\User');
+	}
+	
 	
 }

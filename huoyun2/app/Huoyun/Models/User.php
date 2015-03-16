@@ -46,7 +46,7 @@ class User extends Model implements UserInterface, RemindableInterface
 	 */
 	public function profile()
 	{
-		return $this->hasOne('Huoyun\Profile');
+		return $this->hasOne('Huoyun\Models\Profile');
 	}
 
 	/**
@@ -221,6 +221,17 @@ class User extends Model implements UserInterface, RemindableInterface
 	public function truck()
 	{
 		return $this->hasOne('Huoyun\Models\Truck');
+	}
+	
+	
+	/**
+	 * Query the user's horders
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function horders()
+	{
+		return $this->hasMany('Huoyun\Models\Horder');
 	}
 	
 	

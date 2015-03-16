@@ -115,6 +115,23 @@ class TruckController extends BaseController {
 		return json_encode(array('result_code'=>'0', 'truck'=>$truck));
 	}
 	
+	/**
+	 * 根据条件，返回符合条件的Trucks
+	 * TODO: 加入其他匹配条件
+	 * 目前返回所有的trucks
+	 * @return string
+	 */
+	public function getTrucksFromMobile() {
+		Log::info("getTrucksFromMobile");
+		//$userId = Input::get('user_id');
+		// Log::info("userid: ".$userId);
+		$offset = Input::get('offset');
+		$pagecount = Input::get('pagecount');
+		$trucks = $this->trucks->findAll($offset, $pagecount);
+		Log::info("trucks:".$trucks);
+		return json_encode(array('result_code'=>'0', 'trucks'=>$trucks));
+	}
+	
 	
 	
 }
