@@ -57,6 +57,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	Route::post('getUserProfile/fmobile', 'UserController@postUserProfileFromMobile');
 	// update user portrait
 	Route::post('updateUserPortrait/fmobile', 'UserController@updateUserPortraitFromMobile');
+	Route::post('updateUsername/fmobile', 'UserController@updateUserNameFromMobile');
 	
 	# user
 	Route::get('user', [ 'as' => 'user.index', 'uses' => 'UserController@getIndex' ]);

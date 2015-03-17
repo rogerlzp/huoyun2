@@ -29,6 +29,16 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryI
         return $this->model->whereId($uid)->first();
     }
 
+    /**
+     * Find a profile by it's ID.
+     *
+     * @param  string  $uid
+     * @return \Huoyun\Models\Profile
+     */
+    public function findByUserId($userId)
+    {
+    	return $this->model->where('user_id', '=', $userId )->first();
+    }
     
     /**
      * Update the access token on the profile.
@@ -47,11 +57,11 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryI
     
     public function createOrUpdateUserPortraitFromMobile(array $data) {
     	// 首先查找profile
-    	$profile = $this->findById($data['user_id']);
+    	$profile = $this->findByUserId($data['user_id']);
     	if (!$profile) {
     		$profile = $this->getNew ();
     		$profile->created_at = new \DateTime ();
-    		Log::info("add new truck");
+    		Log::info("add new profile");
     	} 
     	$profile->user_id = $data ['user_id'];
     	$profile->company_id = 0;// TODO 
@@ -62,4 +72,23 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryI
     	$profile->save ();
     	return $profile;
     }
+    
+    public function createOrUpdateUserNameFromMobile(array $data) {
+    	// 首先查找profile
+    	$profile = $this->findByUserId($data['user_id']);
+    	if (!$profile) {
+    		$profile = $this->getNew ();
+    		$profile->created_at = new \DateTime ();
+    		Log::info("add new profile");
+    	}
+    	$profile->user_id = $data ['user_id'];
+    	$profile->company_id = 0;// TODO
+    	$profile->name = e ( $data ['name'] );
+    
+    	$profile->updated_at = new \DateTime ();
+    	 
+    	$profile->save ();
+    	return $profile;
+    }
 }
+

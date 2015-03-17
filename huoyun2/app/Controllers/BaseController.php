@@ -35,7 +35,8 @@ class BaseController extends Controller
         			  'getMyHorderFromMobile',
         			  'getTrucksFromMobile',
         			  'updateUserPortraitFromMobile',
-        			  'postUserProfileFromMobile'
+        			  'postUserProfileFromMobile',
+        			  'updateUserNameFromMobile'
         		)));
     }
     

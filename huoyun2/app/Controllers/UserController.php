@@ -49,7 +49,8 @@ class UserController extends BaseController {
 				'except' => array (
 						'getPublic',
 						'updateUserPortraitFromMobile',
-						'postUserProfileFromMobile' 
+						'postUserProfileFromMobile',
+						'updateUserNameFromMobile' 
 				) 
 		] );
 		
@@ -85,6 +86,19 @@ class UserController extends BaseController {
 			) );
 		}
 	}
+	
+	public function updateUserNameFromMobile() {
+		Log::info ( "updateUserNameFromMobile" );
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$data['name'] = Input::get ( 'name' );
+		// decode base64 string
+		if ($profile = $this->profiles->createOrUpdateUserNameFromMobile ( $data )) {
+			return json_encode ( array (
+					'result_code' => '0'
+			) );
+		}
+	}
+	
 	
 	// 获取用户信息
 	public function postUserProfileFromMobile() {
