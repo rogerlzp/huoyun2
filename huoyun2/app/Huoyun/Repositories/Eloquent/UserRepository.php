@@ -69,6 +69,18 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     
     
     /**
+     * Find a user by it's mobile.
+     *
+     * @param  string $username
+     * @return \Tricks\User
+     */
+    public function findByMobile($mobile)
+    {
+    	return $this->model->whereMobile($mobile)->first();
+    }
+    
+    
+    /**
      * Find a user by it's user id.
      *
      * @param  string $userId
@@ -129,21 +141,55 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     }
     
     /**
-     * Create a new user in the database.
+     * 先检查手机号码是否被注册，再检查是否对应的role存在
+     * 如果是，说明已经被注册。 返回10001
+     * 否则，成功
      *
      * @param  array  $data
      * @return \Tricks\User
      */
     public function createFromMobile(array $data)
     {
+    	$result= [];
+    	if (! is_null($user = $this->findByMobile($data['mobile']))) {
+    		if ($user->hasRoleId($data['role_id'])) {
+    	//		return 10001; // 该用户名和角色已经被注册了
+    			$result['code'] = 10001;
+    			$result['user'] = 0;
+    			return $result;
+    		}
+    		else {
+    			
+    		}
+    	}
+    	try {
     	$user = $this->getNew();
     	$user->mobile = $data['mobile'];
     	$user->password = Hash::make($data['password']);
+    	$user->device_token = $data['device_token'];
+    	$user->username = $data['mobile'];
     	$user->save();
+    	Log::info("role id:".$data['role_id']);
+    	
+    	$user->roles()->attach($data['role_id']);
+    	$result['code'] = 0;
+    	$result['user'] =  $user->id;
+    	} catch(Exception $e){
+    		Log.d($e);
+    	}
     
-    	return $user;
+    	return $result;
+    	
     }
 
+    
+   public function updateDeviceTokenFromMobile ($uid, $device_token) {
+   	
+  	 	$user = $this->model->whereId($uid)->first();
+   	    $user->device_token = $device_token;
+   	    $user->save();
+    	
+    }
     
     
 

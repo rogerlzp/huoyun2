@@ -212,6 +212,16 @@ class User extends Model implements UserInterface, RemindableInterface
 		return false;
 	}
 	
+	public function hasRoleId($roleId){
+		foreach ($this->roles as $role) {
+			if ($role->id == $roleId) {
+				return true;
+			}
+		}
+	
+		return false;
+	}
+	
 	
 	/**
 	 * Query the user's truck

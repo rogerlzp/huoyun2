@@ -96,38 +96,30 @@ class AuthController extends BaseController {
 				'password' 
 		] );
 		$credentials ['mobile'] = $credentials ['username'];
+
+		$device_token = Input::get ( 'device_token' );
+		$role_id = Input::get ( 'role_id' );
+		
 		Log::info ( "mobile:" . $credentials ['mobile'] );
 		Log::info ( "username:" . $credentials ['username'] );
 		Log::info ( "password:" . $credentials ['password'] );
+		Log::info ( "device_token:" . $device_token);
 		
 		if (Auth::attempt ( array (
 				'mobile' => $credentials ['mobile'],
 				'password' => $credentials ['password'] 
 		) )) {
 			
-			if ($user = $this->users->getProfileFromMobileByMobile (Input::get('username') )) {
+			if ($user = $this->users->getProfileFromMobileByMobile ( Input::get ( 'username' ) )) {
 				Log::info ( 'user:' );
+				// 更新device_token
+				$this->users->updateDeviceTokenFromMobile ( $user->id, $device_token );
 				// return json_encode(array('result_code'=>'0'));
-				
-				if ($user->username == 'test2') {
-					Log::info ( "get user" );
-					
-					$driverRole = $this->roles->findByName ( "driver" );
-					
-					/*
-					 * if (!$driverRole->exists()) {
-					 * Log::info("save driver role");
-					 * $driverRole->save();
-					 * }
-					 */
-					Log::info ( "role id=" . $driverRole->id );
-					$user->attachRole ( $driverRole ); // add driver, remove later TODO
-				}
 				if ($user->hasRole ( "driver" )) {
 					Log::info ( "check user" . 'this is a driver' );
 					Log::info ( "check user" . $user );
-					$user2 = $this->users->getProfileFromMobileByMobile ($user->mobile );
-					Log::info ( "check user" . $user->profile()->first() );
+					$user2 = $this->users->getProfileFromMobileByMobile ( $user->mobile );
+					Log::info ( "check user" . $user->profile ()->first () );
 					return json_encode ( array (
 							'result_code' => '0',
 							'user' => $user2,
@@ -136,8 +128,8 @@ class AuthController extends BaseController {
 				} else {
 					Log::info ( "check user" . 'this is NOT a driver' );
 					Log::info ( "check user" . $user );
-					Log::info ( "check user" . $user->profile()->first() );
-					$user2 = $this->users->getProfileFromMobileByMobile ($user->mobile );
+					Log::info ( "check user" . $user->profile ()->first () );
+					$user2 = $this->users->getProfileFromMobileByMobile ( $user->mobile );
 					return json_encode ( array (
 							'result_code' => '0',
 							'user' => $user2,
@@ -214,7 +206,6 @@ class AuthController extends BaseController {
 	}
 	
 	/**
-	 * Post registration form.
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
@@ -222,12 +213,22 @@ class AuthController extends BaseController {
 		$data = [ ];
 		$data ['mobile'] = Input::get ( 'mobile' );
 		$data ['password'] = Input::get ( 'password' );
+		$data ['device_token'] = Input::get ( 'device_token' );
+		$data ['role_id'] = Input::get ( 'role_id' );
+		Log::info('role_id' . $data['role_id']);
+		Log::info('mobile' . $data['mobile']);
 		
-		if ($user = $this->users->createFromMobile ( $data )) {
-			return json_encode ( array (
-					'result_code' => '0',
-					'user_id' => $user->id 
-			) );
+		
+		// 返回10001 表示已经被注册
+		// 0 表示成功注册
+		if ($result = $this->users->createFromMobile ( $data )) {
+		
+				return json_encode ( array (
+						'result_code' =>  $result['code'],
+						'user_id' => $result['user']
+						
+				) );
+				
 		}
 	}
 	
@@ -240,6 +241,8 @@ class AuthController extends BaseController {
 		$data = [ ];
 		$data ['mobile'] = Input::get ( 'mobile' );
 		$data ['password'] = Input::get ( 'password' );
+		$data ['device_token'] = Input::get ( 'device_token' );
+		$data ['role_id'] = Input::get ( 'role_id' );
 		
 		if ($user = $this->users->createFromMobile ( $data )) {
 			// check is driver role exists
@@ -248,6 +251,7 @@ class AuthController extends BaseController {
 			if (! $driverRole->exists ()) {
 				$driverRole->save ();
 			}
+			
 			$user->attachRole ( $driverRole );
 			return json_encode ( array (
 					'result_code' => '0',

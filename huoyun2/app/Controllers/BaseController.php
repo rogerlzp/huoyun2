@@ -27,6 +27,7 @@ class BaseController extends Controller
         		'except' => 
         		array('postRegisterFromMobile',
         		      'postVerifyFromMobile',
+        			  'postRegisterDriverFromMobile',
         			  'postLoginFromMobile',
         			  'postCreateHorderFromMobile',
         			  'postUpdateTruckDriverFromMobile',
