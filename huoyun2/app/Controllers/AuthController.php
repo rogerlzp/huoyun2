@@ -140,7 +140,7 @@ class AuthController extends BaseController {
 		} else {
 			Log::info ( "failed login" );
 			return json_encode ( array (
-					"result_code" => '10001' 
+					"result_code" => '10003' 
 			) );
 		}
 	}
@@ -245,14 +245,7 @@ class AuthController extends BaseController {
 		$data ['role_id'] = Input::get ( 'role_id' );
 		
 		if ($user = $this->users->createFromMobile ( $data )) {
-			// check is driver role exists
-			$driverRole = new Role ();
-			$driverRole->name = "driver";
-			if (! $driverRole->exists ()) {
-				$driverRole->save ();
-			}
 			
-			$user->attachRole ( $driverRole );
 			return json_encode ( array (
 					'result_code' => '0',
 					'user_id' => $user->id 

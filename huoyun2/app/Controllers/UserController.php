@@ -50,7 +50,9 @@ class UserController extends BaseController {
 						'getPublic',
 						'updateUserPortraitFromMobile',
 						'postUserProfileFromMobile',
-						'updateUserNameFromMobile' 
+						'updateUserNameFromMobile',
+						'updateUserIdentityImageFromMobile' ,
+						'postUpdateDriverLicenseImageFromMobile'	
 				) 
 		] );
 		
@@ -87,6 +89,29 @@ class UserController extends BaseController {
 		}
 	}
 	
+	/**
+	 *  更新用户身份证照片
+	 * @return string
+	 */
+	public function updateUserIdentityImageFromMobile() {
+		Log::info ( "updateUserIdentityImageFromMobile" );
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$bitmapString = Input::get ( 'bitmap' );
+		// decode base64 string
+		$image = base64_decode ( $bitmapString );
+		$png_url = $data ['user_id'] . "_" . "identity" . "_" . time () . ".jpg";
+		$path = "/img/users/upload/" . $png_url;
+		Image::make ( $image )->save ( public_path () . $path );
+		$data ['identity_card_image_url'] = $path;
+	
+		if ($profile = $this->profiles->createOrUpdateUserIdentityImageFromMobile ( $data )) {
+			return json_encode ( array (
+					'result_code' => '0'
+			) );
+		}
+	}
+	
+	
 	public function updateUserNameFromMobile() {
 		Log::info ( "updateUserNameFromMobile" );
 		$data ['user_id'] = Input::get ( 'user_id' );
@@ -116,5 +141,28 @@ class UserController extends BaseController {
 		}
 	}
 	
+	
+
+	/**
+	 *  更新驾驶证照片
+	 * @return string
+	 */
+	public function postUpdateDriverLicenseImageFromMobile() {
+		Log::info ( "postUpdateDriverLicenseImageFromMobile" );
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$bitmapString = Input::get ( 'bitmap' );
+		// decode base64 string
+		$image = base64_decode ( $bitmapString );
+		$png_url = $data ['user_id'] . "_" . "driver_license" . "_" . time () . ".jpg";
+		$path = "/img/users/upload/" . $png_url;
+		Image::make ( $image )->save ( public_path () . $path );
+		$data ['driver_license_image_url'] = $path;
+	
+		if ($profile = $this->profiles->createOrUpdateUserDriverImageFromMobile ( $data )) {
+			return json_encode ( array (
+					'result_code' => '0'
+			) );
+		}
+	}
 }
 

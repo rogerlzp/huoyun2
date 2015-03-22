@@ -152,6 +152,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     {
     	$result= [];
     	if (! is_null($user = $this->findByMobile($data['mobile']))) {
+    		Log::info(" user is null");
     		if ($user->hasRoleId($data['role_id'])) {
     	//		return 10001; // 该用户名和角色已经被注册了
     			$result['code'] = 10001;

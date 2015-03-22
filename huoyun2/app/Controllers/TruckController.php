@@ -88,9 +88,26 @@ class TruckController extends BaseController {
 	}
 	
 
+	/**
+	 * 更新truck mobile （刚开始的时候，可能不需要）
+	 */
+	public function postUpdateTruckMobileFromMobile() {
+		Log::info("postUpdateTruckDriverFromMobile");
+			
+		$data=[];
+		$data['user_id'] = Input::get('user_id');	
+		$data['truck_id'] =  Input::get('truck_id');
+		$data['tmobile_num'] =  Input::get('tmobile_num');
+		
+		if ($truck = $this->trucks->createOrUpdateTruckFromMobile2($data)) {
+			return json_encode(array('result_code'=>'0', 'truck_id'=>$truck->id ));
+		}
+			
+		
+	}
 	
 	
-	public function postUpdateDriverLicenseImageFromMobile() {
+	public function postUpdateTruckLicenseImageFromMobile() {
 		Log::info("postUpdateDriverLicenseImageFromMobile");
 		$data['user_id'] = Input::get('user_id');
 		$bitmapString = Input::get('bitmap');
@@ -106,6 +123,26 @@ class TruckController extends BaseController {
 			return json_encode(array('result_code'=>'0', 'truck_id'=>$truck->id ));
 		}
 	}
+	
+	public function postUpdateTruckPhotoFromMobile() {
+		Log::info("postUpdateDriverLicenseImageFromMobile");
+		$data['user_id'] = Input::get('user_id');
+		$bitmapString = Input::get('bitmap');
+		$data['truck_id'] =  Input::get('truck_id');
+		//decode base64 string
+		$image = base64_decode($bitmapString);
+		$png_url = $data['user_id']."_".$data['truck_id']."_".time().".jpg";
+		$path = "/img/users/upload/" . $png_url;
+		Image::make($image)->save(public_path().$path);
+		$data['tphoto_image_url'] = $path;
+	
+		if ($truck = $this->trucks->createOrUpdateTruckPhotoImageFromMobile($data)) {
+			return json_encode(array('result_code'=>'0', 'truck_id'=>$truck->id ));
+		}
+	}
+	
+	
+	
 	
 	public function postGetTruckInfoFromMobile() {
 		Log::info("postGetTruckInfoFromMobile");

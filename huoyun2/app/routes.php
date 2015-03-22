@@ -51,14 +51,28 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	// get truck 
 	Route::post('getTruck/fmobile', 'TruckController@postGetTruckInfoFromMobile');
 	// update driver license image 
-	Route::post('updateDriverLicense/fmobile', 'TruckController@postUpdateDriverLicenseImageFromMobile');
+	Route::post('updateDriverLicense/fmobile', 'UserController@postUpdateDriverLicenseImageFromMobile');
+	
+	// update truck mobile
+	Route::post('updateTruckMobile/fmobile', 'TruckController@postUpdateTruckMobileFromMobile');
+	
+	// update truck license image
+	Route::post('updateTruckLicenseImage/fmobile', 'TruckController@postUpdateTruckLicenseImageFromMobile');
+	// update truck photo
+	Route::post('updateTruckPhoto/fmobile', 'TruckController@postUpdateTruckPhotoFromMobile');
+	
+	
+	
 	
 	// get user profile
 	Route::post('getUserProfile/fmobile', 'UserController@postUserProfileFromMobile');
 	// update user portrait
 	Route::post('updateUserPortrait/fmobile', 'UserController@updateUserPortraitFromMobile');
+	// update user name
 	Route::post('updateUsername/fmobile', 'UserController@updateUserNameFromMobile');
-	
+	// update user identity
+	Route::post('updateUserIdentityImage/fmobile', 'UserController@updateUserIdentityImageFromMobile');
+
 	# user
 	Route::get('user', [ 'as' => 'user.index', 'uses' => 'UserController@getIndex' ]);
 	

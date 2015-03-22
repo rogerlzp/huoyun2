@@ -87,6 +87,32 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 		return $truck;
 	}
 	
+	/**
+	 * Create a new horder in the database.
+	 *
+	 * @param array $data
+	 * @return \Huoyun\Horder
+	 */
+	public function createOrUpdateTruckFromMobile2(array $data) {
+		// 根据truck Id 判断， 为0则新建truck， 否则更新信息。
+		if ($data ['truck_id'] == '0') {
+			$truck = $this->getNew ();
+			Log::info("add new truck");
+			$truck->created_at = new \DateTime ();
+		} else if ($data ['truck_id'] != '0') {  // update
+			$truck = $this->findById($data ['truck_id']);
+			Log::info("update truck");
+			$truck->updated_at = new \DateTime ();
+		}
+		$truck->user_id = $data ['user_id'];
+	
+		$truck->tmobile_num = e ( $data ['tmobile_num']);
+
+	
+		$truck->save ();
+		return $truck;
+	}
+	
 
 	
 	
@@ -112,6 +138,30 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 		$truck->save ();
 		return $truck;
 	}
+	
+	
+	/**
+	 * 更新truck phpto
+	 * @param array $data
+	 * @return \Illuminate\Database\Eloquent\Model
+	 */
+	public function createOrUpdateTruckPhotoImageFromMobile(array $data) {
+		// 根据truck Id 判断， 为0则新建truck， 否则更新信息。
+		if ($data ['truck_id'] == '0') {
+			$truck = $this->getNew ();
+			$truck->created_at = new \DateTime ();
+			Log::info("add new truck");
+		} else if ($data ['truck_id'] != '0') {  // update
+			$truck = $this->findById($data ['truck_id']);
+			$truck->updated_at = new \DateTime ();
+			Log::info("update truck");
+		}
+		$truck->user_id = $data ['user_id'];
+		$truck->tphoto_image_url =   $data["tphoto_image_url"] ;
+		$truck->save ();
+		return $truck;
+	}
+	
 	
 	/**
 	 * Update the specified tag in the database.
