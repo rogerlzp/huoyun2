@@ -12,6 +12,7 @@ class CreateTrucksTable extends Migration {
 	 */
 	public function up()
 	{
+		/*
 		Schema::create('truck_weight', function($table)
 		{
 			$table->engine = 'InnoDB';
@@ -36,6 +37,7 @@ class CreateTrucksTable extends Migration {
 			$table->string('type');
 			$table->string('description');
 		});
+		*/
 		
 		Schema::create('trucks', function($table)
 		{
@@ -43,13 +45,13 @@ class CreateTrucksTable extends Migration {
 		
 			$table->increments('id')->unsigned();
 			$table->integer('user_id')->unsigned();
-			$table->integer('tstatus_id');
-			$table->integer('taudit_status_id');
-			$table->integer('tweight_id')->unsigned();
-			$table->integer('tlength_id')->unsigned();
-			$table->integer('ttype_id')->unsigned();			
+			$table->integer('truck_status')->nullable()->default(0);
+			$table->integer('truck_audit_status')->nullable()->default(0);
+			$table->integer('truck_weight')->unsigned();
+			$table->integer('truck_length')->unsigned();
+			$table->integer('truck_type')->unsigned();			
 			$table->string('tmobile_num');
-			$table->string('tlicense');
+			$table->string('truck_license');
 			$table->string('tl_image_url')->nullable()->default(NULL);
 			
 			$table->string('tphoto_image_url')->nullable()->default(NULL);

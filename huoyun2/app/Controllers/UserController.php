@@ -77,7 +77,7 @@ class UserController extends BaseController {
 		$bitmapString = Input::get ( 'bitmap' );
 		// decode base64 string
 		$image = base64_decode ( $bitmapString );
-		$png_url = $data ['user_id'] . "_" . "portrait" . "_" . time () . ".jpg";
+		$png_url = $data ['user_id'] . "_" . "portrait" . "_" . time () . ".png";
 		$path = "/img/users/upload/" . $png_url;
 		Image::make ( $image )->save ( public_path () . $path );
 		$data ['profile_image_url'] = $path;
@@ -99,7 +99,7 @@ class UserController extends BaseController {
 		$bitmapString = Input::get ( 'bitmap' );
 		// decode base64 string
 		$image = base64_decode ( $bitmapString );
-		$png_url = $data ['user_id'] . "_" . "identity" . "_" . time () . ".jpg";
+		$png_url = $data ['user_id'] . "_" . "identity" . "_" . time () . ".png";
 		$path = "/img/users/upload/" . $png_url;
 		Image::make ( $image )->save ( public_path () . $path );
 		$data ['identity_card_image_url'] = $path;
@@ -153,7 +153,7 @@ class UserController extends BaseController {
 		$bitmapString = Input::get ( 'bitmap' );
 		// decode base64 string
 		$image = base64_decode ( $bitmapString );
-		$png_url = $data ['user_id'] . "_" . "driver_license" . "_" . time () . ".jpg";
+		$png_url = $data ['user_id'] . "_" . "driver_license" . "_" . time () . ".png";
 		$path = "/img/users/upload/" . $png_url;
 		Image::make ( $image )->save ( public_path () . $path );
 		$data ['driver_license_image_url'] = $path;

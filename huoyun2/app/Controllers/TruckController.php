@@ -84,12 +84,12 @@ class TruckController extends BaseController {
 		$data=[];
 		  
 		$data['user_id'] = Input::get('user_id');
-		$data['tweight_id'] = Input::get('tweight_id');
-		$data['tlength_id'] =  Input::get('tlength_id');
-		$data['ttype_id'] =  Input::get('ttype_id');
+		$data['truck_weight'] = Input::get('truck_weight');
+		$data['truck_length'] =  Input::get('truck_length');
+		$data['truck_type'] =  Input::get('truck_type');
 		$data['truck_id'] =  Input::get('truck_id');
-		$data['tlicense'] =  Input::get('tlicense');
-		$data['tstatus_id'] =  Input::get('tstatus_id');
+		$data['truck_license'] =  Input::get('truck_license');
+		$data['truck_status'] =  Input::get('truck_status');
 		$data['tmobile_num'] =  Input::get('tmobile_num');
 	
 		if ($truck = $this->trucks->createOrUpdateTruckFromMobile($data)) {
@@ -125,7 +125,7 @@ class TruckController extends BaseController {
 		$data['truck_id'] =  Input::get('truck_id');
 		//decode base64 string
 		$image = base64_decode($bitmapString);
-		$png_url = $data['user_id']."_".$data['truck_id']."_".time().".jpg";
+		$png_url = $data['user_id']."_".$data['truck_id']."_".time().".png";
 		$path = "/img/users/upload/" . $png_url;
 		Image::make($image)->save(public_path().$path);
 		$data['tl_image_url'] = $path;
@@ -142,7 +142,7 @@ class TruckController extends BaseController {
 		$data['truck_id'] =  Input::get('truck_id');
 		//decode base64 string
 		$image = base64_decode($bitmapString);
-		$png_url = $data['user_id']."_".$data['truck_id']."_".time().".jpg";
+		$png_url = $data['user_id']."_".$data['truck_id']."_".time().".png";
 		$path = "/img/users/upload/" . $png_url;
 		Image::make($image)->save(public_path().$path);
 		$data['tphoto_image_url'] = $path;

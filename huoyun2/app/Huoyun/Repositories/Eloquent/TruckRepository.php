@@ -74,14 +74,13 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 			Log::info("update truck");
 		}
 		$truck->user_id = $data ['user_id'];
-		$truck->tweight_id = e ( $data ['tweight_id'] );
-		$truck->tlength_id = e($data ['tlength_id']);
-		$truck->ttype_id = e ( $data ['ttype_id']);
-		$truck->tstatus_id = e ( $data ['tstatus_id']);
+		$truck->truck_weight = e ( $data ['truck_weight'] );
+		$truck->truck_length = e($data ['truck_length']);
+		$truck->truck_type = e ( $data ['truck_type']);
+		$truck->truck_status = e ( $data ['truck_status']);
 		$truck->tmobile_num = e ( $data ['tmobile_num']);
-		$truck->tlicense = e ( $data ['tlicense']);
+		$truck->truck_license = e ( $data ['truck_license']);
 		$truck->created_at = new \DateTime ();
-		$truck->updated_at = new \DateTime ();
 		
 		$truck->save ();
 		return $truck;
@@ -126,15 +125,17 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 		// 根据truck Id 判断， 为0则新建truck， 否则更新信息。
 		if ($data ['truck_id'] == '0') {
 			$truck = $this->getNew ();
+			$truck->created_at = new \DateTime ();
 			Log::info("add new truck");
 		} else if ($data ['truck_id'] != '0') {  // update
 			$truck = $this->findById($data ['truck_id']);
 			Log::info("update truck");
+			$truck->updated_at = new \DateTime ();
 		}
 		$truck->user_id = $data ['user_id'];
 		$truck->tl_image_url =   $data["tl_image_url"] ;
-		$truck->created_at = new \DateTime ();
-		$truck->updated_at = new \DateTime ();
+
+
 		$truck->save ();
 		return $truck;
 	}
