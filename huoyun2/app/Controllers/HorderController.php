@@ -79,6 +79,8 @@ class HorderController extends BaseController
     	$data['cargo_volume'] =  Input::get('cargo_volume');
     	$data['cargo_weight'] =  Input::get('cargo_weight');
     	$data['horder_desc']  =  Input::get('horder_desc');
+    	
+    
 
     	if ($horder = $this->horders->createFromMobile($data)) {
     		return json_encode(array('result_code'=>'0', 'horder_id'=>$horder->id ));
