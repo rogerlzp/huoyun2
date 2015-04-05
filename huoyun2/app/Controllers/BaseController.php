@@ -43,7 +43,9 @@ class BaseController extends Controller {
 						'postUpdateTruckLicenseImageFromMobile',
 						'postUpdateTruckPhotoFromMobile' ,
 						'postUpdateTruckMobileFromMobile',
-						'updateUserIdentityImageFromMobile'
+						'updateUserIdentityImageFromMobile',
+						'postTruckPlanFromMobile',
+						'getNewHordersFromMobile'
 				) 
 		) );
 	}

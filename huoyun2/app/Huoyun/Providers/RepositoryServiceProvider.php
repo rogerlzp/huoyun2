@@ -35,6 +35,11 @@ class RepositoryServiceProvider extends ServiceProvider
         		'Huoyun\Repositories\TruckRepositoryInterface',
         		'Huoyun\Repositories\Eloquent\TruckRepository'
         );
+
+        $this->app->bind(
+        		'Huoyun\Repositories\TruckPlanRepositoryInterface',
+        		'Huoyun\Repositories\Eloquent\TruckPlanRepository'
+        );
         $this->app->bind(
         		'Huoyun\Repositories\ProfileRepositoryInterface',
         		'Huoyun\Repositories\Eloquent\ProfileRepository'

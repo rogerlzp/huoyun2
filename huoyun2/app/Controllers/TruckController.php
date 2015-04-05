@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Huoyun\Repositories\UserRepositoryInterface;
 use Huoyun\Repositories\TruckRepositoryInterface;
+use Huoyun\Repositories\TruckPlanRepositoryInterface;
 
 use Illuminate\Support\Facades\Log;
 
@@ -19,6 +20,14 @@ class TruckController extends BaseController {
 	 * @var \Huoyun\Repositories\TruckRepositoryInterface
 	 */
 	protected $trucks;
+	
+
+	/**
+	 * Truck plan repository.
+	 *
+	 * @var \Huoyun\Repositories\TruckPlan RepositoryInterface
+	 */
+	protected $truckplans;
 
 	/**
 	 * User repository.
@@ -40,13 +49,15 @@ class TruckController extends BaseController {
 	 *
 	 * @param \Huoyun\Repositories\UserRepositoryInterface  $users
 	 */
-	public function __construct( UserRepositoryInterface $users, TruckRepositoryInterface $trucks)
+	public function __construct( UserRepositoryInterface $users, TruckRepositoryInterface $trucks,
+			TruckPlanRepositoryInterface $truckplans)
 	{
 		Log::info(' __construct in UserController');
 		parent::__construct();
 		$this->user   = Auth::user();
 		$this->users  = $users;
 		$this->trucks  = $trucks;
+		$this->truckplans  = $truckplans;
 	}
 	
 	/**
@@ -170,6 +181,37 @@ class TruckController extends BaseController {
 	}
 	
 	
+	
+	
+	/**
+	 * Post registration form.
+	 *
+	 * @return \Illuminate\Http\RedirectResponse
+	 */
+	public function postTruckPlanFromMobile() 
+	{
+		Log::info("createOrUpdateTruckPlanFromMobile");
+			
+		$data=[];
+	
+		$data['user_id'] = Input::get('user_id');
+		$data['truck_id'] = Input::get('truck_id');
+		
+		
+		$data['truck_shipper_address_code'] =  Input::get('truck_shipper_address_code');
+		$data['truck_consignee_address_code'] =  Input::get('truck_consignee_address_code');
+		$data['truck_shipper_date'] =  Input::get('truck_shipper_date');
+		$data['truck_plan_desc'] =  Input::get('truck_plan_desc');
+		
+	
+		if ($truckplan = $this->truckplans->createOrUpdateTruckPlanFromMobile($data)) {
+			return json_encode(array('result_code'=>'0', 'truckplan_id'=>$truckplan->id ));
+		}
+			
+	}
+	
+	
+		
 	
 }
 

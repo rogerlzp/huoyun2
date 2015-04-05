@@ -1,17 +1,16 @@
 <?php namespace Huoyun\Models;
 
-use Illuminate\Auth\UserInterface;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Reminders\RemindableInterface;
 
-class Truck extends Model 
+
+class TruckPlan extends Model 
 {
 	/**
 	 * The class to used to present the model.
 	 *
 	 * @var string
 	 */
-	public $presenter = 'Huoyun\Presenters\TruckPresenter';
+	public $presenter = 'Huoyun\Presenters\TruckPlanPresenter';
 	
 
     /**
@@ -19,7 +18,7 @@ class Truck extends Model
      *
      * @var string
      */
-	protected $table = 'trucks';
+	protected $table = 'truck_plans';
 
 	/**
 	 * The attributes that should be hidden for arrays.
@@ -37,15 +36,9 @@ class Truck extends Model
 	{
 		return $this->belongsTo('Huoyun\Models\User');
 	}
-	
-	/**
-	 * Query the user's truckPlans
-	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
-	 */
-	public function truckPlans()
+	public function truck()
 	{
-		return $this->hasMany('Huoyun\Models\TruckPlan');
+		return $this->belongsTo('Huoyun\Models\Truck');
 	}
 	
 }

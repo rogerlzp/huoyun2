@@ -63,6 +63,26 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
     	  
     }
    
+    
+    /**
+     * Find the horder created by the user with the given status
+     * 0: 创造订单，等待车主接货
+     * 1: 车主已经接单
+     * 2: 已经完成
+     */
+    public function findNewHorderByStatus($status, $offset, $perPage = 10 ) {
+    	Log::info("offset=".$offset);
+    	Log::info("perPage=".$perPage);
+    	return $this->model->where('status', '=',  $status)
+    	->orderBy('created_at', 'desc')
+    	->skip($offset)
+    	->take($perPage)
+    	->get();
+    	//    ->paginate($perPage);
+        
+    }
+    
+
 
     /**
      * Create a new horder in the database.

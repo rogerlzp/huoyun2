@@ -60,9 +60,11 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	Route::post('updateTruckLicenseImage/fmobile', 'TruckController@postUpdateTruckLicenseImageFromMobile');
 	// update truck photo
 	Route::post('updateTruckPhoto/fmobile', 'TruckController@postUpdateTruckPhotoFromMobile');
+	// create truck plan
+	Route::post('createTruckPlan/fmobile', 'TruckController@postTruckPlanFromMobile');
 	
 	
-	
+
 	
 	// get user profile
 	Route::post('getUserProfile/fmobile', 'UserController@postUserProfileFromMobile');
@@ -87,6 +89,9 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	Route::post('createHorder/fmobile', 'HorderController@postCreateHorderFromMobile');
 	
 	Route::post('getTrucks/fmobile', 'TruckController@getTrucksFromMobile');
+	// get new horders
+	Route::post('getNewHorder/fmobile', 'HorderController@getNewHordersFromMobile');
+	
 
 	
 });

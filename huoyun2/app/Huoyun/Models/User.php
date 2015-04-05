@@ -244,5 +244,15 @@ class User extends Model implements UserInterface, RemindableInterface
 		return $this->hasMany('Huoyun\Models\Horder');
 	}
 	
+	/**
+	 * Query the user's truckPlans
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
+	public function truckPlans()
+	{
+		return $this->hasMany('Huoyun\Models\TruckPlan');
+	}
+	
 	
 }
