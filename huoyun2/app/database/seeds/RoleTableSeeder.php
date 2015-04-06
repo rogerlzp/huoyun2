@@ -14,5 +14,19 @@ class RoleTableSeeder extends Seeder {
 		;
 		
 		DB::table ( 'roles' )->insert ( $roles );
+		
+		
+		$users = [
+				[
+						'id' => '0',
+						'username' => 'username',
+						'mobile' => '11111111111',
+						'password' => 'password',		
+				]	
+		];
+		DB::table ( 'users' )->insert ( $users );
+		
 	}
+	
+	
 }

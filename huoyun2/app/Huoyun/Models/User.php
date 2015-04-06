@@ -254,5 +254,28 @@ class User extends Model implements UserInterface, RemindableInterface
 		return $this->hasMany('Huoyun\Models\TruckPlan');
 	}
 	
+	/**
+	 * 发起接受意向的货单
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+	 */
+	public  function repliedHorders(){
+		return $this->belongsToMany('Huoyun\Models\Horder', 'horder_replied_drivers', 'driver_id', 'horder_id');
+	}
+	
+	/**
+	 * 推送给我的货单
+	 */
+	public  function sentHorders(){
+		return $this->belongsToMany('Huoyun\Models\Horder', 'horder_sent_drivers', 'driver_id', 'horder_id');
+	}
+	
+	/**
+	 * 完成的货单
+	 */
+	public  function completedHorders(){
+		return $this->belongsToMany('Huoyun\Models\Horder', 'driver_id');
+	}
+	
+	
 	
 }

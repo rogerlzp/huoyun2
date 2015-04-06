@@ -44,12 +44,40 @@ class CreateHordersTable extends Migration {
 			
 			$table->integer('user_id')->unsigned();
 			$table->integer('status')->default(0);
+			$table->integer('driver_id')->unsigned()->default(0);
 			
 			$table->foreign('user_id')->references('id')->on('users')
+			->onUpdate('cascade')->onDelete('cascade');
+			$table->foreign('driver_id')->references('id')->on('users')
 			->onUpdate('cascade')->onDelete('cascade');
 			
 			$table->timestamps();
 		});
+		
+		Schema::create('horder_sent_drivers', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->integer('driver_id')->unsigned();
+			$table->integer('horder_id')->unsigned();
+			$table->timestamps();
+			$table->foreign('driver_id')->references('id')->on('users')
+			->onUpdate('cascade')->onDelete('cascade');
+			$table->foreign('horder_id')->references('id')->on('horders')
+			->onUpdate('cascade')->onDelete('cascade');
+		});	
+		
+		Schema::create('horder_replied_drivers', function(Blueprint $table)
+		{
+			$table->increments('id');
+			$table->integer('driver_id')->unsigned();
+			$table->integer('horder_id')->unsigned();
+			$table->timestamps();
+			$table->foreign('driver_id')->references('id')->on('users')
+			->onUpdate('cascade')->onDelete('cascade');
+			$table->foreign('horder_id')->references('id')->on('horders')
+			->onUpdate('cascade')->onDelete('cascade');
+		});
+		
 	}
 
 	/**

@@ -82,5 +82,32 @@ class Horder extends Model
 		return $this->belongsTo('Huoyun\Models\User');
 	}
 	
+	/**
+	 * 接受该 horder 的司机
+	 */
+	public function driver()
+	{
+		return $this->belongsTo('Huoyun\Models\User', 'driver_id');
+	}
+	
+	
+	/**
+	 * 该订单推送的司机
+	 */
+	public  function sentDrivers(){
+		return $this->belongsToMany('Huoyun\Models\User', 'horder_sent_drivers', 'horder_id', 'driver_id');
+	}
+	
+	/**
+	 * 接受该订单的司机
+	 */
+	public  function repliedDrivers(){
+		return $this->belongsToMany('Huoyun\Models\User', 'horder_replied_drivers', 'horder_id', 'driver_id');
+	}
+	
+	/**
+	 * 
+	 */
+	
 	
 }

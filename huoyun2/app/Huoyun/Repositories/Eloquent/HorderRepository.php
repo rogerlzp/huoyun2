@@ -111,7 +111,8 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
         $horder->cargo_weight    = e($data['cargo_weight']);
         $horder->horder_desc    = e($data['horder_desc']);
         $horder->created_at    = new \DateTime();
-        $horder->updated_at    = new \DateTime();
+       
+        $horder->driver_id = 1;// default driver
 
         $horder->save();
 
