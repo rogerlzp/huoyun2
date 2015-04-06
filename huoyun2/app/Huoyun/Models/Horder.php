@@ -28,7 +28,7 @@ class Horder extends Model
 	 */
 	protected $hidden = [  ];
 
-	
+	protected  $fillable = ['id'];
 
 	
 

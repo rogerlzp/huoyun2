@@ -99,6 +99,7 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
         $horder->status    = 0;
         $horder->shipper_username    = e($data['shipper_username']);
         $horder->shipper_date    = $data['shipper_date'];
+        $horder->shipper_phone    = $data['shipper_phone'];
         $horder->shipper_address_code    = e($data['shipper_address_code']);
         
         $horder->consignee_address_code    = e($data['consignee_address_code']);
@@ -118,6 +119,30 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 
         return $horder;
     }
+    
+    
+   public function getHorderDrivers($id) {
+   	
+   	$Horder1 = Horder::find(1);
+   	$user = User::find(2);
+   	
+   	$Horder1->sentDrivers()->attach($user);
+   	
+   	return $this->model->where('id', '=',  $id);
+   	
+   }
+   
+  public function driverReplpRequest(array $data){
+  	$id = $data['horder_id'];
+  	$driver_id = $data['horder_id'];
+  	
+  	$horder = $this->model->whereId($id);
+  	if($horder) {
+  		if($user = User::find($driver_id)) {
+  			$horder->repliedDrivers->attach($user);
+  		}
+  	}
+  }
     
     
 }

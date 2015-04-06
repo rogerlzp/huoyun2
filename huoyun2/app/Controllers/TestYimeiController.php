@@ -3,6 +3,7 @@
 use Illuminate\Routing\Controller;
 use Huoyun\Models\User;
 use Huoyun\Models\Role;
+use Huoyun\Models\Horder;
 
 use Hardywen\Yimei\Facades\YimeiFacade;
 use Huoyun\Services\Xinge\XingeApp;
@@ -100,6 +101,13 @@ class TestYimeiController extends Controller {
 		$mess->setType(Message::TYPE_MESSAGE);
 		$ret = $push->PushSingleDevice('token', $mess);
 		return $ret;
+	}
+	
+
+	function TestHorderDrivers()
+	{
+		$horder = Horder::find(1);
+		$horder->
 	}
 
 }

@@ -68,6 +68,7 @@ class HorderController extends BaseController
     	$data['user_id'] = Input::get('user_id');
     	$data['shipper_username'] = Input::get('shipper_username');
     	$data['shipper_date'] =  Input::get('shipper_date');
+    	$data['shipper_phone'] =  Input::get('shipper_phone');
     	$data['shipper_address_code'] =  Input::get('sa_code');
     	
     	$data['consignee_address_code'] =  Input::get('ca_code');
@@ -118,9 +119,37 @@ class HorderController extends BaseController
     	$status = 0;
     	 
     	$horders = $this->horders->findNewHorderByStatus($status, $offset, $pagecount);
-    	Log::info('horders='.$horders);
+    	// TODO: 优化搜索
+    	foreach ($horders as $horder){
+    		$horder->sent_drivers = $horder->sentDrivers()->select('driver_id')->get();
+    		$horder->replied_drivers = $horder->repliedDrivers()->select('driver_id')->get();
+    	}
+    	
     	return json_encode(array('result_code'=>'0', 'horders'=>$horders));
     		
+    }
+    
+    public function testGetHorderDrivers() {    
+    	$horders = $this->horders->getHorderDrivers(1)->get();
+    	
+    	foreach ($horders as $horder){
+    		$horder->sentDrivers = $horder->sentDrivers();
+    	}
+    	echo $horders;
+    	return json_encode(array('result_code'=>'0', 'horders'=>$horders));
+    
+    }
+    //driver 发送接单申请
+    public function  replyHorderFromMobile(){
+    	$data = [];
+    	 $data['driver_id']= Input::get('driver_id');
+    	 $data['horder_id']= Input::get('horder_id');
+    	
+       	$result = $this->horders->driverReplpRequest($data);
+      
+    	return json_encode(array('result_code'=>'0'));  // TODO: 增加错误处理
+    	
+    	
     }
     
 
