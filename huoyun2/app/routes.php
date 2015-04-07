@@ -93,7 +93,7 @@ Route::group([ 'namespace' => 'Controllers' ], function () {
 	Route::post('getNewHorder/fmobile', 'HorderController@getNewHordersFromMobile');
 	
 	//driver 发送接受horder
-	Route::post('replyHorder/fmobile', 'HorderController@replyHorderFromMobile');
+	Route::post('requestHorder/fmobile', 'HorderController@requestHorderFromMobile');
 	
 	Route::get('horder/test1', 'HorderController@testGetHorderDrivers');
 

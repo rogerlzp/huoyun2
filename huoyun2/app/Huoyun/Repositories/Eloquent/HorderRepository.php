@@ -132,14 +132,14 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
    	
    }
    
-  public function driverReplpRequest(array $data){
+  public function driverRequestHorder(array $data){
   	$id = $data['horder_id'];
   	$driver_id = $data['horder_id'];
   	
-  	$horder = $this->model->whereId($id);
+  	$horder = $this->model->whereId($id)->first();
   	if($horder) {
   		if($user = User::find($driver_id)) {
-  			$horder->repliedDrivers->attach($user);
+  			$horder->repliedDrivers()->attach($user);
   		}
   	}
   }

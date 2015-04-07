@@ -140,12 +140,12 @@ class HorderController extends BaseController
     
     }
     //driver 发送接单申请
-    public function  replyHorderFromMobile(){
+    public function  requestHorderFromMobile(){
     	$data = [];
     	 $data['driver_id']= Input::get('driver_id');
     	 $data['horder_id']= Input::get('horder_id');
     	
-       	$result = $this->horders->driverReplpRequest($data);
+       	$result = $this->horders->driverRequestHorder($data);
       
     	return json_encode(array('result_code'=>'0'));  // TODO: 增加错误处理
     	

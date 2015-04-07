@@ -91,6 +91,8 @@ class AuthController extends BaseController {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function postLoginFromMobile() {
+		$data=[];
+		
 		$credentials = Input::only ( [ 
 				'username',
 				'password' 
@@ -105,12 +107,16 @@ class AuthController extends BaseController {
 		Log::info ( "password:" . $credentials ['password'] );
 		Log::info ( "device_token:" . $device_token);
 		
+		$data['role_id'] = $role_id;
+		$data['username'] = Input::get ( 'username' );
+	
+		
 		if (Auth::attempt ( array (
 				'mobile' => $credentials ['mobile'],
 				'password' => $credentials ['password'] 
 		) )) {
 			
-			if ($user = $this->users->getProfileFromMobileByMobile ( Input::get ( 'username' ) )) {
+			if ($user = $this->users->getProfileFromMobile ( $data)) {
 				Log::info ( 'user:' );
 				// 更新device_token
 				$this->users->updateDeviceTokenFromMobile ( $user->id, $device_token );
@@ -118,7 +124,7 @@ class AuthController extends BaseController {
 				if ($user->hasRole ( "driver" )) {
 					Log::info ( "check user" . 'this is a driver' );
 					Log::info ( "check user" . $user );
-					$user2 = $this->users->getProfileFromMobileByMobile ( $user->mobile );
+					$user2 = $this->users->getProfileFromMobile ( $data);
 					Log::info ( "check user" . $user->profile ()->first () );
 					return json_encode ( array (
 							'result_code' => '0',
@@ -127,9 +133,7 @@ class AuthController extends BaseController {
 					) );
 				} else {
 					Log::info ( "check user" . 'this is NOT a driver' );
-					Log::info ( "check user" . $user );
-					Log::info ( "check user" . $user->profile ()->first () );
-					$user2 = $this->users->getProfileFromMobileByMobile ( $user->mobile );
+					$user2 = $this->users->getProfileFromMobile ( $data );
 					return json_encode ( array (
 							'result_code' => '0',
 							'user' => $user2,

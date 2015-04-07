@@ -30,10 +30,14 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
     
     public function getProfileFromMobile(array $data) {
-    	$user = $this->model->whereId($data['user_id'])->first();
-    	Log::info('user='.$user);
-    	Log::info('user info ='.$user->profile()->first());
-    	return $user;
+    	$users = $this->model->whereMobile($data['username'])->get();
+    	
+    	foreach($users as $user) {
+    		if ($user->hasRoleId($data['role_id'])) {
+    			return $user;
+    		}
+    	}
+    	return null;
     }
     
     public function getProfileFromMobileByMobile($mobile) {
