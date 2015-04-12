@@ -92,7 +92,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function findByUserId($userId)
     {
-    	return $this->model->whereId($userId)->get();
+    	return $this->model->whereId($userId)->first();
     }
     
     

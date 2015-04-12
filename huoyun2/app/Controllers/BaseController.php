@@ -46,7 +46,10 @@ class BaseController extends Controller {
 						'updateUserIdentityImageFromMobile',
 						'postTruckPlanFromMobile',
 						'getNewHordersFromMobile',
-						'requestHorderFromMobile'
+						'requestHorderFromMobile',
+						'getDriverForHorderFromMobile',
+						'toggleDriverForHorderFromMobile',
+						'getHorderForDriverFromMobile'
 				) 
 		) );
 	}
