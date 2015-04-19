@@ -1,12 +1,12 @@
 <?php
 
-
 namespace Huoyun\Repositories\Eloquent;
 
 use Huoyun\Models\User;
 use Huoyun\Models\Horder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
@@ -62,6 +62,12 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 		return $this->model->where ( 'status', '=', $status )->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
 		// ->paginate($perPage);
 	}
+	public function findNewHorderByStatusAndLocation($status, $offset, $perPage = 10, $sa_code, $ca_code) {
+		return $this->model->where ( 'status', '=', $status )
+		->where ( 'shipper_address_code', 'like', $sa_code.'%' )
+		->where ( 'consignee_address_code', 'like', $ca_code.'%' )
+		->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
+	}
 	
 	/**
 	 * Create a new horder in the database.
@@ -106,18 +112,56 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 	}
 	public function driverRequestHorder(array $data) {
 		$id = $data ['horder_id'];
-		$driver_id = $data ['horder_id'];
+		$driver_id = $data ['driver_id'];
+		$resultCode = 0;
 		
 		$horder = $this->model->whereId ( $id )->first ();
 		if ($horder) {
+			Log::info($horder);
 			if ($user = User::find ( $driver_id )) {
+				foreach ($horder->repliedDrivers  as $repliedDriver) {
+					if ($repliedDriver->id ==  $driver_id) {
+						$horder->repliedDrivers ()->detach ( $user );
+						$resultCode = 1;
+						return $resultCode;
+					}
+					
+				}
 				$horder->repliedDrivers ()->attach ( $user );
+				Event::fire('huozhu.notice', array("horder"=>$horder, "user"=>$user));
+				$resultCode = 0;
+					
+				/*
+				if ($horder->hasRepliedDriverId ( $driver_id )) {
+					Log::inf('driver_id'.$driver_id);
+					$horder->repliedDrivers ()->detach ( $user );
+					$resultCode = 1;
+				} else {
+					$horder->repliedDrivers ()->attach ( $user );
+					Event::fire('huozhu.notice', array($horder, $user));
+					$resultCode = 0;
+				}
+				*/
 			}
 		}
+		return $resultCode;
 	}
 	public function getHorderById($id) {
 		return $this->model->whereId ( $id )->first ();
 	}
+	
+	public function deleteHorderFromMobile(array $data) { 
+		// 
+		$horder = $this->model->whereId($data['horder_id']) ->where('user_id', '=', $data['user_id'])->first();
+		if($horder) {
+			$horder->delete();
+			return 0;
+		} else {
+			return -1;
+		}
+	}
+	
+	
 	public function getHorderByStatusAndDriver(array $data) {
 		$horder_status = $data ['horder_status'];
 		$driver_id = $data ['driver_id'];

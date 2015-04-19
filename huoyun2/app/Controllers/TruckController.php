@@ -177,6 +177,10 @@ class TruckController extends BaseController {
 		$pagecount = Input::get('pagecount');
 		$trucks = $this->trucks->findAll($offset, $pagecount);
 		Log::info("trucks:".$trucks);
+		foreach($trucks as $truck) {
+			$truck->driver = $truck->user()->first();
+			$truck->profile = $truck->user()->first()->profile()->first();
+		}
 		return json_encode(array('result_code'=>'0', 'trucks'=>$trucks));
 	}
 	

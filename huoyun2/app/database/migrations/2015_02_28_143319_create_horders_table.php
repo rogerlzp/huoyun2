@@ -64,6 +64,7 @@ class CreateHordersTable extends Migration {
 			->onUpdate('cascade')->onDelete('cascade');
 			$table->foreign('horder_id')->references('id')->on('horders')
 			->onUpdate('cascade')->onDelete('cascade');
+			$table->unique(array('horder_id', 'driver_id'));
 		});	
 		
 		Schema::create('horder_replied_drivers', function(Blueprint $table)
@@ -76,6 +77,7 @@ class CreateHordersTable extends Migration {
 			->onUpdate('cascade')->onDelete('cascade');
 			$table->foreign('horder_id')->references('id')->on('horders')
 			->onUpdate('cascade')->onDelete('cascade');
+			$table->unique(array('horder_id', 'driver_id'));
 		});
 		
 	}

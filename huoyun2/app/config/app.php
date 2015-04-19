@@ -130,6 +130,7 @@ return array(
 		
 		'Huoyun\Providers\RepositoryServiceProvider',
 		'Huoyun\Providers\NavigationServiceProvider',
+		'Huoyun\Providers\EventServiceProvider',
 
 	),
 

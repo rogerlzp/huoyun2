@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Controllers;
 
 use Illuminate\Routing\Controller;
@@ -33,7 +32,7 @@ class BaseController extends Controller {
 						'postCreateHorderFromMobile',
 						'postUpdateTruckDriverFromMobile',
 						'postUpdateDriverLicenseImageFromMobile',
-					
+						
 						'postGetTruckInfoFromMobile',
 						'getMyHorderFromMobile',
 						'getTrucksFromMobile',
@@ -41,7 +40,7 @@ class BaseController extends Controller {
 						'postUserProfileFromMobile',
 						'updateUserNameFromMobile',
 						'postUpdateTruckLicenseImageFromMobile',
-						'postUpdateTruckPhotoFromMobile' ,
+						'postUpdateTruckPhotoFromMobile',
 						'postUpdateTruckMobileFromMobile',
 						'updateUserIdentityImageFromMobile',
 						'postTruckPlanFromMobile',
@@ -49,7 +48,8 @@ class BaseController extends Controller {
 						'requestHorderFromMobile',
 						'getDriverForHorderFromMobile',
 						'toggleDriverForHorderFromMobile',
-						'getHorderForDriverFromMobile'
+						'getHorderForDriverFromMobile',
+						'postDeleteHorderFromMobile' 
 				) 
 		) );
 	}

@@ -32,6 +32,16 @@ class Horder extends Model
 
 	
 
+	public function hasRepliedDriverId($driverId){
+		foreach ($this->repliedDrivers as $repliedDriver) {
+			if ($repliedDriver->driverId == $driverId) {
+				return true;
+			}
+		}
+	
+		return false;
+	}
+	
 	
 	/**
 	 * User following relationship

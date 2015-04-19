@@ -78,6 +78,18 @@ class HorderController extends BaseController {
 			) );
 		}
 	}
+	public function postDeleteHorderFromMobile() {
+		Log::info ( "postCreateHorderFromMobile" );
+		
+		$data = [ ];
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$result = $this->horders->deleteHorderFromMobile ( $data );
+		
+		return json_encode ( array (
+				'result_code' => $result 
+		) );
+	}
 	
 	/**
 	 * Get My Horder.
@@ -109,13 +121,33 @@ class HorderController extends BaseController {
 		Log::info ( "getMyHorderFromMobile" );
 		$offset = Input::get ( 'offset' );
 		$pagecount = Input::get ( 'pagecount' );
-		$status = 0;
+		$driver_id = Input::get ( 'driver_id' );
 		
-		$horders = $this->horders->findNewHorderByStatus ( $status, $offset, $pagecount );
+		$sa_code = Input::get ( 'sa_code' );
+		$ca_code = Input::get ( 'ca_code' );
+		
+		$status = 0;
+		Log::info ( 'sa_code' . $sa_code );
+		Log::info ( 'ca_code' . $ca_code );
+		
+		if ($sa_code == 1 && $ca_code == 1) {
+			$horders = $this->horders->findNewHorderByStatus ( $status, $offset, $pagecount );
+		} else { // TODO: add other conditions
+			$horders = $this->horders->findNewHorderByStatusAndLocation ( $status, $offset, $pagecount, $sa_code, $ca_code );
+		}
 		// TODO: 优化搜索
 		foreach ( $horders as $horder ) {
-			$horder->sent_drivers = $horder->sentDrivers ()->select ( 'driver_id' )->get ();
-			$horder->replied_drivers = $horder->repliedDrivers ()->select ( 'driver_id' )->get ();
+			// $horder->sent_drivers = $horder->sentDrivers ()->select ( 'driver_id' )->get ();
+			$replied_drivers = $horder->repliedDrivers ()->select ( 'driver_id' )->get ();
+			$IS_CONTAINED = 0;
+			foreach ( $replied_drivers as $replied_driver ) {
+				if ($replied_driver->driver_id == $driver_id) { // 已经包含了
+					$IS_CONTAINED = 1;
+					break;
+				}
+			}
+			$horder->replied_drivers_count = count ( $replied_drivers );
+			$horder->is_driver_replied = $IS_CONTAINED;
 		}
 		
 		return json_encode ( array (
@@ -137,6 +169,7 @@ class HorderController extends BaseController {
 	}
 	// driver 发送接单申请
 	public function requestHorderFromMobile() {
+		Log::info ( 'requestHorderFromMobile' );
 		$data = [ ];
 		$data ['driver_id'] = Input::get ( 'driver_id' );
 		$data ['horder_id'] = Input::get ( 'horder_id' );
@@ -144,7 +177,7 @@ class HorderController extends BaseController {
 		$result = $this->horders->driverRequestHorder ( $data );
 		
 		return json_encode ( array (
-				'result_code' => '0' 
+				'result_code' => $result 
 		) ); // TODO: 增加错误处理
 	}
 	public function toggleDriverForHorderFromMobile() {
@@ -154,7 +187,7 @@ class HorderController extends BaseController {
 		$data ['user_id'] = Input::get ( 'user_id' );
 		
 		$horder = $this->horders->updateDriverId ( $data );
-		if ($horder->driver_id == 1) {   // 取消了司机
+		if ($horder->driver_id == 1) { // 取消了司机
 			return json_encode ( array (
 					'result_code' => '1' 
 			) );
@@ -164,21 +197,18 @@ class HorderController extends BaseController {
 			) );
 		}
 	}
-	
-		public function getHorderForDriverFromMobile() {
-			Log::info ( "getHorderForDriverFromMobile" );
-			$data = [];
-			$data ['driver_id'] = Input::get ( 'driver_id' );
-			$data ['horder_status'] = Input::get ( 'horder_status' );
-			
-			$horders = $this->horders->getHorderByStatusAndDriver ( $data );
-			return json_encode ( array (
-					'result_code' => '0',
-					'horders' => $horders
-			) );
-			
-		}
-	
+	public function getHorderForDriverFromMobile() {
+		Log::info ( "getHorderForDriverFromMobile" );
+		$data = [ ];
+		$data ['driver_id'] = Input::get ( 'driver_id' );
+		$data ['horder_status'] = Input::get ( 'horder_status' );
+		
+		$horders = $this->horders->getHorderByStatusAndDriver ( $data );
+		return json_encode ( array (
+				'result_code' => '0',
+				'horders' => $horders 
+		) );
+	}
 	public function getDriverForHorderFromMobile() {
 		Log::info ( "getDriverForHorderFromMobile" );
 		$data = [ ];

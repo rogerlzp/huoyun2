@@ -84,7 +84,8 @@ class UserController extends BaseController {
 		
 		if ($profile = $this->profiles->createOrUpdateUserPortraitFromMobile ( $data )) {
 			return json_encode ( array (
-					'result_code' => '0' 
+					'result_code' => '0',
+					'image_url' => $path
 			) );
 		}
 	}
@@ -106,7 +107,8 @@ class UserController extends BaseController {
 	
 		if ($profile = $this->profiles->createOrUpdateUserIdentityImageFromMobile ( $data )) {
 			return json_encode ( array (
-					'result_code' => '0'
+					'result_code' => '0',
+					'image_url' => $path
 			) );
 		}
 	}
@@ -130,7 +132,7 @@ class UserController extends BaseController {
 		Log::info ( "postUserProfileFromMobile" );
 		$data ['user_id'] = Input::get ( 'user_id' );
 		
-		if ($user = $this->users->getProfileFromMobile ( $data )) {
+		if ($user = $this->users->getProfileById ( $data )) {
 			Log::info ( 'user:' );
 			// return json_encode(array('result_code'=>'0'));
 			return json_encode ( array (

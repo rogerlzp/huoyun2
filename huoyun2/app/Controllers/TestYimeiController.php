@@ -107,7 +107,6 @@ class TestYimeiController extends Controller {
 	function TestHorderDrivers()
 	{
 		$horder = Horder::find(1);
-		$horder->
 	}
 
 }

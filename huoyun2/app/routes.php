@@ -104,6 +104,9 @@ Route::group ( [
 	// create horder
 	Route::post ( 'createHorder/fmobile', 'HorderController@postCreateHorderFromMobile' );
 	
+	// delete horder
+	Route::post ( 'deleteHorder/fmobile', 'HorderController@postDeleteHorderFromMobile' );
+	
 	Route::post ( 'getTrucks/fmobile', 'TruckController@getTrucksFromMobile' );
 	// get new horders
 	Route::post ( 'getNewHorder/fmobile', 'HorderController@getNewHordersFromMobile' );
@@ -120,8 +123,10 @@ Route::group ( [
 	// driver 工作中的 horder
 	Route::post ( 'getHorderForDriver/fmobile', 'HorderController@getHorderForDriverFromMobile' );
 	
-	
-	
 	Route::get ( 'horder/test1', 'HorderController@testGetHorderDrivers' );
+	
+	// queue demo
+	
+	Route::get ( 'queue/test1', 'QueueDemoController@addQueue' );
 } );
 
