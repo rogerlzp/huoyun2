@@ -49,8 +49,13 @@ class BaseController extends Controller {
 						'getDriverForHorderFromMobile',
 						'toggleDriverForHorderFromMobile',
 						'getHorderForDriverFromMobile',
-						'postDeleteHorderFromMobile' 
-				) 
+						'postDeleteHorderFromMobile',
+						'getWorkingHorderForDriverFromMobile',
+						'getWorkingHorderForHuozhuFromMobile',
+						'updateHorderStatusFromMobile',
+						'getWorkedHorderForHuozhuFromMobile'
+				)
+				 
 		) );
 	}
 	

@@ -123,10 +123,27 @@ Route::group ( [
 	// driver 工作中的 horder
 	Route::post ( 'getHorderForDriver/fmobile', 'HorderController@getHorderForDriverFromMobile' );
 	
+	// driver 工作状态中的horder
+	Route::post ( 'getDriverWorkingHorder/fmobile', 'HorderController@getWorkingHorderForDriverFromMobile' );
+	
+	// 货主工作状态中的horder
+	Route::post ( 'getMyWorkingHorder/fmobile', 'HorderController@getWorkingHorderForHuozhuFromMobile' );
+	
+	// 货主完成状态中的horder
+	Route::post ( 'getMyWorkedHorder/fmobile', 'HorderController@getWorkedHorderForHuozhuFromMobile' );
+	
+	// 货主修改工作状态中的horder
+	Route::post ( 'updateHorderStatus/fmobile', 'HorderController@updateHorderStatusFromMobile' );
+	
+	
+	
+	
+	
 	Route::get ( 'horder/test1', 'HorderController@testGetHorderDrivers' );
 	
 	// queue demo
 	
 	Route::get ( 'queue/test1', 'QueueDemoController@addQueue' );
+	Route::get ( 'pivot/test1', 'HorderController@test1' );
 } );
 

@@ -48,6 +48,8 @@ interface UserRepositoryInterface
     public function create(array $data);
 
 
+    public function findByUserId($userId);
+    
     /**
      * Update the user's settings.
      *

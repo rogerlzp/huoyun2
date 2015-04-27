@@ -247,4 +247,79 @@ class HorderController extends BaseController {
 		 * }
 		 */
 	}
+	
+	// driver 中的 working horder
+	public function getWorkingHorderForDriverFromMobile() {
+		Log::info ( 'getWorkingHorderForDriverFromMobile' );
+		$data = [ ];
+		$data ['driver_id'] = Input::get ( 'driver_id' );
+		
+		$horders = $this->horders->getWorkingHorderForDriver ( $data );
+		return json_encode ( array (
+				'result_code' => '0',
+				'horders' => $horders 
+		) );
+	}
+	
+	// huozhu 中的 working horder
+	public function getWorkingHorderForHuozhuFromMobile() {
+		Log::info ( 'getWorkingHorderForHuozhuFromMobile' );
+		$data = [ ];
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$horders = $this->horders->getWorkingHorderForHuozhu ( $data );
+		return json_encode ( array (
+				'result_code' => '0',
+				'horders' => $horders
+		) );
+	}
+	// huozhu 中的 history horder
+	public function getWorkedHorderForHuozhuFromMobile() {
+		Log::info ( 'getWorkedHorderForHuozhuFromMobile' );
+		$data = [ ];
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$horders = $this->horders->getWorkedHorderForHuozhu ( $data );
+		return json_encode ( array (
+				'result_code' => '0',
+				'horders' => $horders
+		) );
+	}
+	
+	// huozhu 中的 working horder
+	public function updateHorderStatusFromMobile() {
+		Log::info ( 'updateHorderStatusFromMobile' );
+		$data = [ ];
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$statusCode = $this->horders->updateHorderStatus ( $data );
+		return json_encode ( array (
+				'result_code' => '0',
+				'horder_status'=>$statusCode
+		) );
+	}
+	
+	
+	
+	public function test1() {
+		Log::info ( "getDriverForHorderFromMobile" );
+		$data = [ ];
+		$data ['driver_id'] = Input::get ( 'driver_id' );
+		$data ['horder_id'] = Input::get ( 'horder_id' );
+		
+		$horder = $this->horders->getHorderById ( 14 );
+		$reqUsers = $horder->repliedDrivers ()->get ();
+		
+		foreach ( $reqUsers as $reqUser ) {
+			Log::info ( $reqUser->profile ()->getForeignKey () );
+			
+			$reqUser->profile = $reqUser->profile ()->first ();
+			$reqUser->truck = $reqUser->truck ();
+		}
+		Log::info ( $reqUser );
+		return json_encode ( array (
+				'result_code' => '0',
+				'users' => $reqUsers 
+		) );
+	}
 }
