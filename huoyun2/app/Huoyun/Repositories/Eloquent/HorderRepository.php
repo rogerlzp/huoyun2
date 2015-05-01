@@ -59,7 +59,8 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 	public function findNewHorderByStatus($status, $offset, $perPage = 10) {
 		Log::info ( "offset=" . $offset );
 		Log::info ( "perPage=" . $perPage );
-		return $this->model->where ( 'status', '=', $status )->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
+		return $this->model->where ( 'status', '=', $status )->orderBy ( 'created_at', 'desc' )
+		->skip ( $offset )->take ( $perPage )->get ();
 		// ->paginate($perPage);
 	}
 	public function findNewHorderByStatusAndLocation($status, $offset, $perPage = 10, $sa_code, $ca_code) {
@@ -161,7 +162,8 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 	public function getHorderByStatusAndDriver(array $data) {
 		$horder_status = $data ['horder_status'];
 		$driver_id = $data ['driver_id'];
-		$horders = $this->model->whereStatus ( $horder_status )->where ( 'driver_id', '=', $driver_id )->get ();
+		$horders = $this->model->whereStatus ( $horder_status )->where ( 'driver_id', '=', $driver_id )
+		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
 		return $horders;
 	}
 	
@@ -172,8 +174,22 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 				1,
 				2,
 				3 
-		) )->where ( 'driver_id', '=', $driver_id )->get ();
+		) )->where ( 'driver_id', '=', $driver_id )
+		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
 		
+		return $horders;
+	}
+	
+	
+	// driver 完成工作状态的horder
+	public function getWorkedHorderForDriver(array $data) {
+		$driver_id = $data ['driver_id'];
+		$horders = $this->model->whereIn ( 'status', array (
+				4,
+				5
+		) )->where ( 'driver_id', '=', $driver_id )
+		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
+	
 		return $horders;
 	}
 	
@@ -184,7 +200,8 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 				1,
 				2,
 				3 
-		) )->where ( 'user_id', '=', $user_id )->get ();
+		) )->where ( 'user_id', '=', $user_id )
+		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
 		
 		foreach ( $horders as $horder ) {
 			
@@ -198,37 +215,34 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 		return $horders;
 	}
 	
-	
 	// huozhu 获取工作状态的horder
 	public function getWorkedHorderForHuozhu(array $data) {
 		$user_id = $data ['user_id'];
 		$horders = $this->model->whereIn ( 'status', array (
 				4,
-				5
-		) )->where ( 'user_id', '=', $user_id )->get ();
-	
+				5 
+		) )->where ( 'user_id', '=', $user_id )
+		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
+		
 		foreach ( $horders as $horder ) {
-				
+			
 			$horder->driver = array (
 					"name" => $horder->driver ()->first ()->profile ()->first ()->name,
-					"mobile" => $horder->driver ()->first ()->mobile
+					"mobile" => $horder->driver ()->first ()->mobile 
 			);
 		}
-	
+		
 		Log::info ( $horders );
 		return $horders;
 	}
-	
-	
-	
 	public function updateHorderStatus(array $data) {
 		$horder_id = $data ['horder_id'];
-		Log::info('horder_id'.$horder_id);
+		Log::info ( 'horder_id' . $horder_id );
 		$horder = $this->model->whereId ( $horder_id )->first ();
 		if ($horder) {
-			Log::info('horder_staus'.$horder->status);
+			Log::info ( 'horder_staus' . $horder->status );
 			switch ($horder->status) {
-			
+				
 				case Config::get ( 'constants.HORDER_STATUS_CONFIRMED' ) :
 					$horder->status = Config::get ( 'constants.HORDER_STATUS_SHIPPING' );
 					break;
@@ -237,6 +251,25 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 					break;
 				case Config::get ( 'constants.HORDER_STATUS_ARRIVED' ) :
 					$horder->status = Config::get ( 'constants.HORDER_STATUS_CONFIRMED_ARRIVED' );
+					break;
+				default :
+					break;
+			}
+			$horder->save ();
+		}
+		return $horder->status;
+	}
+	
+	// updateHorderStatusByDriver
+	public function updateHorderStatusByDriver(array $data) {
+		$horder_id = $data ['horder_id'];
+		Log::info ( 'horder_id' . $horder_id );
+		$horder = $this->model->whereId ( $horder_id )->where ( 'driver_id', '=', $data ['driver_id'] )->first ();
+		if ($horder) {
+			Log::info ( 'horder_staus' . $horder->status );
+			switch ($horder->status) {
+				case Config::get ( 'constants.HORDER_STATUS_SHIPPING' ) :
+					$horder->status = Config::get ( 'constants.HORDER_STATUS_ARRIVED' );
 					break;
 				default :
 					break;

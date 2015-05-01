@@ -202,6 +202,8 @@ class HorderController extends BaseController {
 		$data = [ ];
 		$data ['driver_id'] = Input::get ( 'driver_id' );
 		$data ['horder_status'] = Input::get ( 'horder_status' );
+		$data['offset'] = Input::get ( 'offset' );
+		$data['pagecount'] = Input::get ( 'pagecount' );
 		
 		$horders = $this->horders->getHorderByStatusAndDriver ( $data );
 		return json_encode ( array (
@@ -253,6 +255,8 @@ class HorderController extends BaseController {
 		Log::info ( 'getWorkingHorderForDriverFromMobile' );
 		$data = [ ];
 		$data ['driver_id'] = Input::get ( 'driver_id' );
+		$data['offset'] = Input::get ( 'offset' );
+		$data['pagecount'] = Input::get ( 'pagecount' );
 		
 		$horders = $this->horders->getWorkingHorderForDriver ( $data );
 		return json_encode ( array (
@@ -260,6 +264,22 @@ class HorderController extends BaseController {
 				'horders' => $horders 
 		) );
 	}
+	// driver 中的 working horder
+	public function getWorkedHorderForDriverFromMobile() {
+		Log::info ( 'getWorkedHorderForDriverFromMobile' );
+		$data = [ ];
+		$data ['driver_id'] = Input::get ( 'driver_id' );
+		$data['offset'] = Input::get ( 'offset' );
+		$data['pagecount'] = Input::get ( 'pagecount' );
+	
+		$horders = $this->horders->getWorkedHorderForDriver ( $data );
+		return json_encode ( array (
+				'result_code' => '0',
+				'horders' => $horders
+		) );
+	}
+	
+	
 	
 	// huozhu 中的 working horder
 	public function getWorkingHorderForHuozhuFromMobile() {
@@ -267,6 +287,9 @@ class HorderController extends BaseController {
 		$data = [ ];
 		$data ['user_id'] = Input::get ( 'user_id' );
 		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$data['offset'] = Input::get ( 'offset' );
+		$data['pagecount'] = Input::get ( 'pagecount' );
+		
 		$horders = $this->horders->getWorkingHorderForHuozhu ( $data );
 		return json_encode ( array (
 				'result_code' => '0',
@@ -279,6 +302,9 @@ class HorderController extends BaseController {
 		$data = [ ];
 		$data ['user_id'] = Input::get ( 'user_id' );
 		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$data['offset'] = Input::get ( 'offset' );
+		$data['pagecount'] = Input::get ( 'pagecount' );
+		
 		$horders = $this->horders->getWorkedHorderForHuozhu ( $data );
 		return json_encode ( array (
 				'result_code' => '0',
@@ -292,6 +318,9 @@ class HorderController extends BaseController {
 		$data = [ ];
 		$data ['user_id'] = Input::get ( 'user_id' );
 		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$data['offset'] = Input::get ( 'offset' );
+		$data['pagecount'] = Input::get ( 'pagecount' );
+		
 		$statusCode = $this->horders->updateHorderStatus ( $data );
 		return json_encode ( array (
 				'result_code' => '0',
@@ -299,6 +328,18 @@ class HorderController extends BaseController {
 		) );
 	}
 	
+	// setHorderArrivedByDriverFromMobile
+	public function setHorderArrivedByDriverFromMobile() {
+		Log::info ( 'updateHorderStatusFromMobile' );
+		$data = [ ];
+		$data ['driver_id'] = Input::get ( 'driver_id' );
+		$data ['horder_id'] = Input::get ( 'horder_id' );
+		$statusCode = $this->horders->updateHorderStatusByDriver ( $data );
+		return json_encode ( array (
+				'result_code' => '0',
+				'horder_status'=>$statusCode
+		) );
+	}
 	
 	
 	public function test1() {

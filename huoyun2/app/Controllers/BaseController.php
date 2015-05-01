@@ -53,7 +53,9 @@ class BaseController extends Controller {
 						'getWorkingHorderForDriverFromMobile',
 						'getWorkingHorderForHuozhuFromMobile',
 						'updateHorderStatusFromMobile',
-						'getWorkedHorderForHuozhuFromMobile'
+						'getWorkedHorderForHuozhuFromMobile',
+						'setHorderArrivedByDriverFromMobile',
+						'getWorkedHorderForDriverFromMobile'
 				)
 				 
 		) );

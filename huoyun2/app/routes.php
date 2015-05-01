@@ -126,6 +126,15 @@ Route::group ( [
 	// driver 工作状态中的horder
 	Route::post ( 'getDriverWorkingHorder/fmobile', 'HorderController@getWorkingHorderForDriverFromMobile' );
 	
+	// driver 完成状态中的horder
+	Route::post ( 'getDriverWorkedHorder/fmobile', 'HorderController@getWorkedHorderForDriverFromMobile' );
+	
+	
+	
+	// driver 设置 horder 为送达
+	Route::post ( 'setHorderArrivedByDriver/fmobile', 'HorderController@setHorderArrivedByDriverFromMobile' );
+	
+	
 	// 货主工作状态中的horder
 	Route::post ( 'getMyWorkingHorder/fmobile', 'HorderController@getWorkingHorderForHuozhuFromMobile' );
 	
