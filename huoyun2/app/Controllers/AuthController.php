@@ -91,55 +91,29 @@ class AuthController extends BaseController {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function postLoginFromMobile() {
-		$data=[];
+		$data = [ ];
 		
 		$credentials = Input::only ( [ 
 				'username',
 				'password' 
 		] );
 		$credentials ['mobile'] = $credentials ['username'];
-
-		$device_token = Input::get ( 'device_token' );
-		$role_id = Input::get ( 'role_id' );
 		
-		Log::info ( "mobile:" . $credentials ['mobile'] );
-		Log::info ( "username:" . $credentials ['username'] );
-		Log::info ( "password:" . $credentials ['password'] );
-		Log::info ( "device_token:" . $device_token);
-		
-		$data['role_id'] = $role_id;
-		$data['username'] = Input::get ( 'username' );
-	
+		$data ['role_id'] = Input::get ( 'role_id' );
+		$data ['username'] = Input::get ( 'username' );
+		$data ['device_token'] = Input::get ( 'device_token' );
 		
 		if (Auth::attempt ( array (
 				'mobile' => $credentials ['mobile'],
 				'password' => $credentials ['password'] 
 		) )) {
 			
-			if ($user = $this->users->getProfileFromMobile ( $data)) {
-				Log::info ( 'user:' );
-				// 更新device_token
-				$this->users->updateDeviceTokenFromMobile ( $user->id, $device_token );
-				// return json_encode(array('result_code'=>'0'));
-				if ($user->hasRole ( "driver" )) {
-					Log::info ( "check user" . 'this is a driver' );
-					Log::info ( "check user" . $user );
-					$user2 = $this->users->getProfileFromMobile ( $data);
-					Log::info ( "check user" . $user->profile ()->first () );
-					return json_encode ( array (
-							'result_code' => '0',
-							'user' => $user2,
-							'profile' => $user2->profile ()->first () 
-					) );
-				} else {
-					Log::info ( "check user" . 'this is NOT a driver' );
-					$user2 = $this->users->getProfileFromMobile ( $data );
-					return json_encode ( array (
-							'result_code' => '0',
-							'user' => $user2,
-							'profile' => $user2->profile ()->first () 
-					) );
-				}
+			if ($user = $this->users->getProfileFromMobile ( $data )) {
+				
+				return json_encode ( array (
+						'result_code' => '0',
+						'user' => $user 
+				) );
 			}
 		} else {
 			Log::info ( "failed login" );
@@ -219,20 +193,17 @@ class AuthController extends BaseController {
 		$data ['password'] = Input::get ( 'password' );
 		$data ['device_token'] = Input::get ( 'device_token' );
 		$data ['role_id'] = Input::get ( 'role_id' );
-		Log::info('role_id' . $data['role_id']);
-		Log::info('mobile' . $data['mobile']);
-		
+		Log::info ( 'role_id' . $data ['role_id'] );
+		Log::info ( 'mobile' . $data ['mobile'] );
 		
 		// 返回10001 表示已经被注册
 		// 0 表示成功注册
 		if ($result = $this->users->createFromMobile ( $data )) {
-		
-				return json_encode ( array (
-						'result_code' =>  $result['code'],
-						'user_id' => $result['user']
-						
-				) );
-				
+			
+			return json_encode ( array (
+					'result_code' => $result ['code'],
+					'user_id' => $result ['user'] 
+			) );
 		}
 	}
 	

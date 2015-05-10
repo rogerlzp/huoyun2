@@ -42,7 +42,8 @@ class BaseController extends Controller {
 						'postUpdateTruckLicenseImageFromMobile',
 						'postUpdateTruckPhotoFromMobile',
 						'postUpdateTruckMobileFromMobile',
-						'updateUserIdentityImageFromMobile',
+						'updateUserIdentityFrontImageFromMobile',
+						'updateUserIdentityBackImageFromMobile',
 						'postTruckPlanFromMobile',
 						'getNewHordersFromMobile',
 						'requestHorderFromMobile',
@@ -55,9 +56,9 @@ class BaseController extends Controller {
 						'updateHorderStatusFromMobile',
 						'getWorkedHorderForHuozhuFromMobile',
 						'setHorderArrivedByDriverFromMobile',
-						'getWorkedHorderForDriverFromMobile'
-				)
-				 
+						'getWorkedHorderForDriverFromMobile',
+						'verifyTruckFromMobile' 
+				) 
 		) );
 	}
 	

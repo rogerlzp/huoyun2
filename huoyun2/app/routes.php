@@ -67,6 +67,14 @@ Route::group ( [
 	Route::post ( 'updateTruck/fmobile', 'TruckController@postUpdateTruckDriverFromMobile' );
 	// get truck
 	Route::post ( 'getTruck/fmobile', 'TruckController@postGetTruckInfoFromMobile' );
+	
+	// send for audit
+	Route::post ( 'verifyTruck/fmobile', 'TruckController@verifyTruckFromMobile' );
+	
+	// update user identity
+	Route::post ( 'updateVehicleLicenseImage/fmobile', 'TruckController@postUpdateTruckLicenseImageFromMobile' );
+	Route::post ( 'updateVehiclePhotoImage/fmobile', 'TruckController@postUpdateTruckPhotoFromMobile' );
+	
 	// update driver license image
 	Route::post ( 'updateDriverLicense/fmobile', 'UserController@postUpdateDriverLicenseImageFromMobile' );
 	
@@ -87,7 +95,8 @@ Route::group ( [
 	// update user name
 	Route::post ( 'updateUsername/fmobile', 'UserController@updateUserNameFromMobile' );
 	// update user identity
-	Route::post ( 'updateUserIdentityImage/fmobile', 'UserController@updateUserIdentityImageFromMobile' );
+	Route::post ( 'updateUserIdentityFrontImage/fmobile', 'UserController@updateUserIdentityFrontImageFromMobile' );
+	Route::post ( 'updateUserIdentityBackImage/fmobile', 'UserController@updateUserIdentityBackImageFromMobile' );
 	
 	// user
 	Route::get ( 'user', [ 
@@ -129,11 +138,8 @@ Route::group ( [
 	// driver 完成状态中的horder
 	Route::post ( 'getDriverWorkedHorder/fmobile', 'HorderController@getWorkedHorderForDriverFromMobile' );
 	
-	
-	
 	// driver 设置 horder 为送达
 	Route::post ( 'setHorderArrivedByDriver/fmobile', 'HorderController@setHorderArrivedByDriverFromMobile' );
-	
 	
 	// 货主工作状态中的horder
 	Route::post ( 'getMyWorkingHorder/fmobile', 'HorderController@getWorkingHorderForHuozhuFromMobile' );
@@ -143,10 +149,6 @@ Route::group ( [
 	
 	// 货主修改工作状态中的horder
 	Route::post ( 'updateHorderStatus/fmobile', 'HorderController@updateHorderStatusFromMobile' );
-	
-	
-	
-	
 	
 	Route::get ( 'horder/test1', 'HorderController@testGetHorderDrivers' );
 	

@@ -74,7 +74,7 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryI
     }
     
     
-    public function createOrUpdateUserIdentityImageFromMobile(array $data) {
+    public function createOrUpdateUserIdentityFrontImageFromMobile(array $data) {
     	// 首先查找profile
     	$profile = $this->findByUserId($data['user_id']);
     	if (!$profile) {
@@ -84,10 +84,28 @@ class ProfileRepository extends AbstractRepository implements ProfileRepositoryI
     	}
     	$profile->user_id = $data ['user_id'];
     	$profile->company_id = 1;// TODO
-    	$profile->identity_card_image_url = e ( $data ['identity_card_image_url'] );
+    	$profile->identity_front_image_url = e ( $data ['identity_front_image_url'] );
     
     	$profile->updated_at = new \DateTime ();
     	 
+    	$profile->save ();
+    	return $profile;
+    }
+    
+    public function createOrUpdateUserIdentityBackImageFromMobile(array $data) {
+    	// 首先查找profile
+    	$profile = $this->findByUserId($data['user_id']);
+    	if (!$profile) {
+    		$profile = $this->getNew ();
+    		$profile->created_at = new \DateTime ();
+    		Log::info("add new profile");
+    	}
+    	$profile->user_id = $data ['user_id'];
+    	$profile->company_id = 1;// TODO
+    	$profile->identity_back_image_url = e ( $data ['identity_back_image_url'] );
+    
+    	$profile->updated_at = new \DateTime ();
+    
     	$profile->save ();
     	return $profile;
     }

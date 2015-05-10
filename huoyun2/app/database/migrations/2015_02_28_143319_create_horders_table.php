@@ -33,6 +33,11 @@ class CreateHordersTable extends Migration {
 			
 			$table->dateTime('delivery_time');
 			
+			$table->dateTime('confirm_driver_time');
+			$table->dateTime('get_cargo_time');
+			$table->dateTime('sent_cargo_time');
+			$table->dateTime('confirmed_sent_cargo_time');
+			
 			$table->string('truck_type');
 			$table->string('truck_length');
 			

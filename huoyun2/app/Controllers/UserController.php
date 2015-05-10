@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Controllers;
 
 use ImageUpload;
@@ -51,8 +50,9 @@ class UserController extends BaseController {
 						'updateUserPortraitFromMobile',
 						'postUserProfileFromMobile',
 						'updateUserNameFromMobile',
-						'updateUserIdentityImageFromMobile' ,
-						'postUpdateDriverLicenseImageFromMobile'	
+						'updateUserIdentityFrontImageFromMobile',
+						'updateUserIdentityBackImageFromMobile',
+						'postUpdateDriverLicenseImageFromMobile' 
 				) 
 		] );
 		
@@ -85,17 +85,18 @@ class UserController extends BaseController {
 		if ($profile = $this->profiles->createOrUpdateUserPortraitFromMobile ( $data )) {
 			return json_encode ( array (
 					'result_code' => '0',
-					'image_url' => $path
+					'image_url' => $path 
 			) );
 		}
 	}
 	
 	/**
-	 *  更新用户身份证照片
+	 * 更新用户身份证照片
+	 *
 	 * @return string
 	 */
-	public function updateUserIdentityImageFromMobile() {
-		Log::info ( "updateUserIdentityImageFromMobile" );
+	public function updateUserIdentityFrontImageFromMobile() {
+		Log::info ( "updateUserIdentityFrontImageFromMobile" );
 		$data ['user_id'] = Input::get ( 'user_id' );
 		$bitmapString = Input::get ( 'bitmap' );
 		// decode base64 string
@@ -103,29 +104,50 @@ class UserController extends BaseController {
 		$png_url = $data ['user_id'] . "_" . "identity" . "_" . time () . ".png";
 		$path = "/img/users/upload/" . $png_url;
 		Image::make ( $image )->save ( public_path () . $path );
-		$data ['identity_card_image_url'] = $path;
-	
-		if ($profile = $this->profiles->createOrUpdateUserIdentityImageFromMobile ( $data )) {
+		$data ['identity_front_image_url'] = $path;
+		
+		if ($profile = $this->profiles->createOrUpdateUserIdentityFrontImageFromMobile ( $data )) {
 			return json_encode ( array (
 					'result_code' => '0',
-					'image_url' => $path
+					'image_url' => $path 
 			) );
 		}
 	}
 	
-	
+	/**
+	 * 更新用户身份证照片
+	 *
+	 * @return string
+	 */
+	public function updateUserIdentityBackImageFromMobile() {
+		Log::info ( "updateUserIdentityBackImageFromMobile" );
+		$data ['user_id'] = Input::get ( 'user_id' );
+		$bitmapString = Input::get ( 'bitmap' );
+		// decode base64 string
+		$image = base64_decode ( $bitmapString );
+		$png_url = $data ['user_id'] . "_" . "identity" . "_" . time () . ".png";
+		$path = "/img/users/upload/" . $png_url;
+		Image::make ( $image )->save ( public_path () . $path );
+		$data ['identity_back_image_url'] = $path;
+		
+		if ($profile = $this->profiles->createOrUpdateUserIdentityBackImageFromMobile ( $data )) {
+			return json_encode ( array (
+					'result_code' => '0',
+					'image_url' => $path 
+			) );
+		}
+	}
 	public function updateUserNameFromMobile() {
 		Log::info ( "updateUserNameFromMobile" );
 		$data ['user_id'] = Input::get ( 'user_id' );
-		$data['name'] = Input::get ( 'name' );
+		$data ['name'] = Input::get ( 'name' );
 		// decode base64 string
 		if ($profile = $this->profiles->createOrUpdateUserNameFromMobile ( $data )) {
 			return json_encode ( array (
-					'result_code' => '0'
+					'result_code' => '0' 
 			) );
 		}
 	}
-	
 	
 	// 获取用户信息
 	public function postUserProfileFromMobile() {
@@ -133,20 +155,17 @@ class UserController extends BaseController {
 		$data ['user_id'] = Input::get ( 'user_id' );
 		
 		if ($user = $this->users->getProfileById ( $data )) {
-			Log::info ( 'user:' );
 			// return json_encode(array('result_code'=>'0'));
 			return json_encode ( array (
 					'result_code' => '0',
-					'user' => $user,
-					'profile'=>$user->profile()->first() 
+					'user' => $user 
 			) );
 		}
 	}
 	
-	
-
 	/**
-	 *  更新驾驶证照片
+	 * 更新驾驶证照片
+	 *
 	 * @return string
 	 */
 	public function postUpdateDriverLicenseImageFromMobile() {
@@ -159,10 +178,11 @@ class UserController extends BaseController {
 		$path = "/img/users/upload/" . $png_url;
 		Image::make ( $image )->save ( public_path () . $path );
 		$data ['driver_license_image_url'] = $path;
-	
+		
 		if ($profile = $this->profiles->createOrUpdateUserDriverImageFromMobile ( $data )) {
 			return json_encode ( array (
-					'result_code' => '0'
+					'result_code' => '0',
+					'image_url' => $path 
 			) );
 		}
 	}

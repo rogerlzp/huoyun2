@@ -23,7 +23,9 @@ class CreateProfilesTable extends Migration {
 			$table->string('driver_license_image_url')->nullable()->default(NULL);
 			$table->integer('company_id')->unsigned();			
 			$table->string('identity_card')->nullable()->default(NULL);
-			$table->string('identity_card_image_url')->nullable()->default(NULL);
+			$table->string('identity_front_image_url')->nullable()->default(NULL);
+			$table->string('identity_back_image_url')->nullable()->default(NULL);
+			$table->integer('audit_status')->default(0);
 			$table->timestamps();
 		
 			$table->foreign('user_id')
