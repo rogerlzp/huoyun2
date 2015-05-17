@@ -84,8 +84,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 								Config::get ( 'constants.TRUCK_ID' ) => $truck->id 
 						);
 					}
-					
-					return array_merge ( $return_user1, $return_user2, $return_user3 );
+					if ($profile && $truck) {
+						return array_merge ( $return_user1, $return_user2, $return_user3 );
+					} elseif ($profile) {
+						return array_merge ( $return_user1, $return_user2 );
+					}
 				} else if ($data ['role_id'] == Config::get ( 'constants.HUOZHU_ROLE_ID' )) {
 					$profile = $user->profile ()->first ();
 					$return_user1 = array (
@@ -101,11 +104,13 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 								Config::get ( 'constants.IDENTITY_BACK_IMAGE_URL' ) => $profile->identity_back_image_url,
 								Config::get ( 'constants.USER_AUDIT_STATUS' ) => $profile->audit_status 
 						);
+						return array_merge ( $return_user1, $return_user2 );
 					}
-					return array_merge ( $return_user1, $return_user2 );
+					
+					return $return_user1;
 				}
 				Log::info ( 'user' . json_encode ( $return_user ) );
-				return $return_user;
+				return null;
 			}
 		}
 		return null;
@@ -128,6 +133,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 					$return_user2 = array (
 							
 							Config::get ( 'constants.NAME' ) => $profile->name,
+							Config::get ( 'constants.MOBILE' ) => $profile->mobile,
 							Config::get ( 'constants.PROFILE_IMAGE_URL' ) => $profile->profile_image_url,
 							Config::get ( 'constants.IDENTITY_FRONT_IMAGE_URL' ) => $profile->identity_front_image_url,
 							Config::get ( 'constants.IDENTITY_BACK_IMAGE_URL' ) => $profile->identity_back_image_url,
@@ -148,8 +154,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 							Config::get ( 'constants.TRUCK_ID' ) => $truck->id 
 					);
 				}
-				
-				return array_merge ( $return_user1, $return_user2, $return_user3 );
+				if ($truck && $profile) {
+					return array_merge ( $return_user1, $return_user2, $return_user3 );
+				} else if ($profile) {
+					return array_merge ( $return_user1, $return_user2 );
+				}
 			} else if ($user->hasRoleId ( Config::get ( 'constants.HUOZHU_ROLE_ID' ) )) {
 				$profile = $user->profile ()->first ();
 				$return_user1 = array (
@@ -165,8 +174,9 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 							Config::get ( 'constants.IDENTITY_BACK_IMAGE_URL' ) => $profile->identity_back_image_url,
 							Config::get ( 'constants.USER_AUDIT_STATUS' ) => $profile->audit_status 
 					);
+					return array_merge ( $return_user1, $return_user2 );
 				}
-				return array_merge ( $return_user1, $return_user2 );
+				return $return_user1;
 			}
 		}
 		

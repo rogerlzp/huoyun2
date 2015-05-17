@@ -46,9 +46,33 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 	public function findByStatus($user_id, $status, $offset, $perPage = 10) {
 		Log::info ( "offset=" . $offset );
 		Log::info ( "perPage=" . $perPage );
-		return $this->model->where ( 'user_id', '=', $user_id )->where ( 'status', '=', $status )->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
+		return $this->model->where ( 'user_id', '=', $user_id )->where ( 'status', '=', $status )
+		->select ( 'shipper_username', 'id', 'driver_id', 'shipper_address_code as sa_code', 
+				'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume',
+				 'truck_type', 'status', 'shipper_date', 'horder_desc' )
+		->with ( 'sentDrivers' )->orderBy ( 'created_at', 'desc' )
+		->skip ( $offset )->take ( $perPage )->get ();
 		// ->paginate($perPage);
 	}
+	
+	/**
+	 * Find the horder created by the user with the given status
+	 * 0: 创造订单，等待车主接货
+	 * 1: 车主已经接单
+	 * 2: 已经完成
+	 */
+	public function findNewHorderByUser($user_id, $offset, $perPage = 10) {
+		Log::info ( "offset=" . $offset );
+		Log::info ( "perPage=" . $perPage );
+		return $this->model->where ( 'user_id', '=', $user_id )->where ( 'status', '=', Config::get ( 'constants.HORDER_STATUS_NEW' ) )
+		->select ( 'shipper_username', 'id', 'driver_id', 'shipper_address_code as sa_code',
+				'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume',
+				'truck_type', 'status', 'shipper_date', 'horder_desc' )
+				->with ( 'sentDrivers' )->orderBy ( 'created_at', 'desc' )
+				->skip ( $offset )->take ( $perPage )->get ();
+		// ->paginate($perPage);
+	}
+	
 	
 	/**
 	 * Find the horder created by the user with the given status
@@ -59,12 +83,11 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 	public function findNewHorderByStatus($status, $offset, $perPage = 10) {
 		Log::info ( "offset=" . $offset );
 		Log::info ( "perPage=" . $perPage );
-		return $this->model->where ( 'status', '=', $status )->orderBy ( 'created_at', 'desc' )
-		->skip ( $offset )->take ( $perPage )->get ();
+		return $this->model->where ( 'status', '=', $status )->select ( 'shipper_username', 'id', 'user_id', 'driver_id', 'shipper_phone', 'shipper_address_code as sa_code', 'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume', 'truck_type', 'status', 'shipper_date', 'horder_desc' )->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
 		// ->paginate($perPage);
 	}
 	public function findNewHorderByStatusAndLocation($status, $offset, $perPage = 10, $sa_code, $ca_code) {
-		return $this->model->where ( 'status', '=', $status )->where ( 'shipper_address_code', 'like', $sa_code . '%' )->where ( 'consignee_address_code', 'like', $ca_code . '%' )->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
+		return $this->model->where ( 'status', '=', $status )->where ( 'shipper_address_code', 'like', $sa_code . '%' )->where ( 'consignee_address_code', 'like', $ca_code . '%' )->select ( 'shipper_username', 'id', 'user_id', 'driver_id', 'shipper_phone', 'shipper_address_code as sa_code', 'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume', 'truck_type', 'status', 'shipper_date', 'horder_desc' )->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
 	}
 	
 	/**
@@ -162,8 +185,7 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 	public function getHorderByStatusAndDriver(array $data) {
 		$horder_status = $data ['horder_status'];
 		$driver_id = $data ['driver_id'];
-		$horders = $this->model->whereStatus ( $horder_status )->where ( 'driver_id', '=', $driver_id )
-		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
+		$horders = $this->model->whereStatus ( $horder_status )->where ( 'driver_id', '=', $driver_id )->skip ( $data ['offset'] )->take ( $data ['pagecount'] )->get ();
 		return $horders;
 	}
 	
@@ -174,22 +196,19 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 				1,
 				2,
 				3 
-		) )->where ( 'driver_id', '=', $driver_id )
-		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
+		) )->where ( 'driver_id', '=', $driver_id )->select ( 'shipper_username', 'id', 'user_id', 'driver_id', 'shipper_phone', 'shipper_address_code as sa_code', 'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume', 'truck_type', 'status', 'shipper_date', 'horder_desc' )->skip ( $data ['offset'] )->take ( $data ['pagecount'] )->get ();
 		
 		return $horders;
 	}
-	
 	
 	// driver 完成工作状态的horder
 	public function getWorkedHorderForDriver(array $data) {
 		$driver_id = $data ['driver_id'];
 		$horders = $this->model->whereIn ( 'status', array (
 				4,
-				5
-		) )->where ( 'driver_id', '=', $driver_id )
-		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
-	
+				5 
+		) )->where ( 'driver_id', '=', $driver_id )->select ( 'shipper_username', 'id', 'user_id', 'driver_id', 'shipper_phone', 'shipper_address_code as sa_code', 'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume', 'truck_type', 'status', 'shipper_date', 'horder_desc' )->skip ( $data ['offset'] )->take ( $data ['pagecount'] )->get ();
+		
 		return $horders;
 	}
 	
@@ -200,8 +219,7 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 				1,
 				2,
 				3 
-		) )->where ( 'user_id', '=', $user_id )
-		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
+		) )->where ( 'user_id', '=', $user_id )->select ( 'shipper_username', 'id', 'user_id', 'driver_id', 'shipper_phone', 'shipper_address_code as sa_code', 'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume', 'truck_type', 'status', 'shipper_date', 'horder_desc' )->skip ( $data ['offset'] )->take ( $data ['pagecount'] )->get ();
 		
 		foreach ( $horders as $horder ) {
 			
@@ -221,8 +239,7 @@ class HorderRepository extends AbstractRepository implements HorderRepositoryInt
 		$horders = $this->model->whereIn ( 'status', array (
 				4,
 				5 
-		) )->where ( 'user_id', '=', $user_id )
-		->skip ( $data['offset'])->take ( $data['pagecount'] )->get ();
+		) )->where ( 'user_id', '=', $user_id )->select ( 'shipper_username', 'id', 'user_id', 'driver_id', 'shipper_phone', 'shipper_address_code as sa_code', 'consignee_address_code as ca_code', 'cargo_type', 'cargo_weight', 'cargo_volume', 'truck_type', 'status', 'shipper_date', 'horder_desc' )->skip ( $data ['offset'] )->take ( $data ['pagecount'] )->get ();
 		
 		foreach ( $horders as $horder ) {
 			

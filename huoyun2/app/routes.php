@@ -19,6 +19,10 @@ Route::group ( [
 			'uses' => 'AuthController@home' 
 	] );
 	
+	Route::get ( 'admin', [
+	'as' => 'home',
+	'uses' => 'AuthController@home'
+			] );
 	// Authentication and registration routes
 	Route::get ( 'login', [ 
 			'as' => 'auth.login',
@@ -46,7 +50,7 @@ Route::group ( [
 	Route::post ( 'verify/fmobile', 'AuthController@postVerifyFromMobile' );
 	Route::post ( 'login/fmobile', 'AuthController@postLoginFromMobile' );
 	
-	Route::post ( 'getMyHorder/fmobile', 'HorderController@getMyHorderFromMobile' );
+	Route::post ( 'getMyHorder/fmobile', 'HorderController@getMyNewHorderFromMobile' );
 	Route::post ( 'getHorder/fmobile', 'AuthController@getHorderFromMobile' );
 	
 	// driver register

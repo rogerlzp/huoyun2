@@ -46,8 +46,7 @@ class AuthController extends BaseController {
 	 * @return \Response
 	 */
 	public function home() {
-		echo "wait";
-		// $this->view('home.login');
+		 $this->view('home.index');
 	}
 	
 	/**
@@ -91,6 +90,8 @@ class AuthController extends BaseController {
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function postLoginFromMobile() {
+		
+		Log::info('postLoginFromMobile');
 		$data = [ ];
 		
 		$credentials = Input::only ( [ 

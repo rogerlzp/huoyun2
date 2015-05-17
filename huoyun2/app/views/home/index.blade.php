@@ -11,6 +11,5 @@
 			</div>
 		</div>
 
-		@include('tricks.grid', ['tricks' => $tricks])
 	</div>
 @stop

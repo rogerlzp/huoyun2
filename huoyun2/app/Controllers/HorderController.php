@@ -96,18 +96,19 @@ class HorderController extends BaseController {
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	public function getMyHorderFromMobile() {
-		Log::info ( "getMyHorderFromMobile" );
+	public function getMyNewHorderFromMobile() {
+		Log::info ( "getMyNewHorderFromMobile" );
 		$userId = Input::get ( 'user_id' );
-		$status = Input::get ( 'horder_status' );
+	//	$status = Input::get ( 'horder_status' );
 		$offset = Input::get ( 'offset' );
 		$pagecount = Input::get ( 'pagecount' );
 		Log::info ( "userId=" . $userId );
-		Log::info ( "status=" . $status );
+	//	Log::info ( "status=" . $status );
 		
-		$horders = $this->horders->findByStatus ( $userId, $status, $offset, $pagecount );
+		$horders = $this->horders->findNewHorderByUser ( $userId, $offset, $pagecount );
 		// TODO: 优化搜索
 		foreach ( $horders as $horder ) {
+			
 			$horder->sent_drivers = $horder->sentDrivers ()->select ( 'driver_id' )->get ();
 			$horder->replied_drivers = $horder->repliedDrivers ()->select ( 'driver_id' )->get ();
 		}
