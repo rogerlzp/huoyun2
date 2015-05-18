@@ -38,9 +38,21 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 	
 	// TODO: 加入其他条件
 	public function findAll($offset, $perPage = 10) {
+		Log::info ( "findAll="  );
 		Log::info ( "offset=" . $offset );
 		Log::info ( "perPage=" . $perPage );
-		return $this->model->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
+		return $this->model
+		->with ( 'user.profile' )
+		->orderBy ( 'created_at', 'desc' )->skip ( $offset )->take ( $perPage )->get ();
+	}
+	// TODO: 加入其他条件
+	public function findByAddress($sa_code, $ca_code, $offset, $perPage = 10) {
+		Log::info ( "findByAddress="  );
+		Log::info ( "offset=" . $offset );
+		Log::info ( "perPage=" . $perPage );
+		return $this->model
+				 ->with ( 'user.profile' )->orderBy ( 'created_at', 'desc' )
+		->skip ( $offset )->take ( $perPage )->get ();
 	}
 	public function findById($id) {
 		return $this->model->whereId ( $id )->first ();
@@ -69,7 +81,7 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 		$truck->truck_length = e ( $data ['truck_length'] );
 		$truck->truck_type = e ( $data ['truck_type'] );
 		$truck->truck_status = e ( $data ['truck_status'] );
-		$truck->tmobile_num = e ( $data ['tmobile_num'] );
+		$truck->truck_mobile = e ( $data ['truck_mobile'] );
 		$truck->truck_license = e ( $data ['truck_license'] );
 		$truck->created_at = new \DateTime ();
 		
@@ -164,7 +176,7 @@ class TruckRepository extends AbstractRepository implements TruckRepositoryInter
 			$truck->truck_length = e ( $data ['truck_length'] );
 			$truck->truck_type = e ( $data ['truck_type'] );
 			$truck->truck_audit_status = Config::get ( 'constants.TRUCK_STATUS_IN_AUDIT' );
-			$truck->tmobile_num = e ( $data ['truck_mobile'] );
+			$truck->truck_mobile = e ( $data ['truck_mobile'] );
 			$truck->truck_plate = e ( $data ['truck_plate'] );
 			$truck->save ();
 		}

@@ -24,6 +24,9 @@ return array (
 		"ID" => "id",
 		"NAME" => "name",
 		"MOBILE" => "mobile",
+		'DRIVER_ID'=>'driver_id',
+		'DRIVER_USERNAME'=>'d_username',
+		'DRIVER_MOBILE'=>'d_mobile',
 		
 		"TRUCK_ID" => "truck_id",
 		"TRUCK_MOBILE" => "truck_mobile",
@@ -40,7 +43,6 @@ return array (
 		"IDENTITY_FRONT_IMAGE_URL" => "id_fimage",
 		"IDENTITY_BACK_IMAGE_URL" => "id_bimage",
 		"PROFILE_IMAGE_URL" => "p_image",
-		
 		"DRIVER_LICENSE_IAMGE_URL" => 'dl_image',
 		
 		"SHIPPER_ADDRESS_CODE" => "sa_code",

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Config;
 use Huoyun\Repositories\UserRepositoryInterface;
 use Huoyun\Repositories\TruckRepositoryInterface;
 use Huoyun\Repositories\TruckPlanRepositoryInterface;
@@ -176,15 +177,50 @@ class TruckController extends BaseController {
 		// Log::info("userid: ".$userId);
 		$offset = Input::get ( 'offset' );
 		$pagecount = Input::get ( 'pagecount' );
-		$trucks = $this->trucks->findAll ( $offset, $pagecount );
-		Log::info ( "trucks:" . $trucks );
-		foreach ( $trucks as $truck ) {
-			$truck->driver = $truck->user ()->first ();
-			$truck->profile = $truck->user ()->first ()->profile ()->first ();
+		$sa_code = Input::get ( 'sa_code' );
+		$ca_code = Input::get ( 'ca_code' );
+		
+		$status = 0;
+		Log::info ( 'sa_code' . $sa_code );
+		Log::info ( 'ca_code' . $ca_code );
+		
+		if ($sa_code == 1 && $ca_code == 1) {
+			$trucks = $this->trucks->findAll ( $offset, $pagecount );
+		} else { // TODO: add other conditions
+			$trucks = $this->trucks->findByAddress ($sa_code, $ca_code , $offset, $pagecount);
 		}
+
+		$return_trucks = array();
+		foreach ( $trucks as $truck ) {
+			Log::info($truck);
+			$return_truck = array(
+					Config::get ( 'constants.TRUCK_LICENSE_IAMGE_URL' ) => $truck->tl_image_url,
+					Config::get ( 'constants.TRUCK_PHOTO_IAMGE_URL' ) => $truck->tphoto_image_url,
+					Config::get ( 'constants.TRUCK_AUDIT_STATUS' ) => $truck->truck_audit_status,
+					Config::get ( 'constants.TRUCK_MOBILE' ) => $truck->truck_mobile,
+					Config::get ( 'constants.TRUCK_PLATE' ) => $truck->truck_plate,
+					Config::get ( 'constants.TRUCK_TYPE' ) => $truck->truck_type,
+					Config::get ( 'constants.TRUCK_LENGTH' ) => $truck->truck_length,
+					Config::get ( 'constants.TRUCK_WEIGHT' ) => $truck->truck_weight,
+					Config::get ( 'constants.TRUCK_ID' ) => $truck->id,
+					Config::get ( 'constants.DRIVER_ID' ) => $truck->user_id,
+					Config::get ( 'constants.DRIVER_USERNAME' ) => $truck->user->username, 
+					Config::get ( 'constants.NAME' ) => $truck->user->profile->name,
+					Config::get ( 'constants.MOBILE' ) => $truck->user->profile->mobile,
+					Config::get ( 'constants.PROFILE_IMAGE_URL' ) => $truck->user->profile->profile_image_url,
+					Config::get ( 'constants.IDENTITY_FRONT_IMAGE_URL' ) => $truck->user->profile->identity_front_image_url,
+					Config::get ( 'constants.IDENTITY_BACK_IMAGE_URL' ) => $truck->user->profile->identity_back_image_url,
+					Config::get ( 'constants.USER_AUDIT_STATUS' ) => $truck->user->profile->audit_status,
+					Config::get ( 'constants.DRIVER_LICENSE_IAMGE_URL' ) => $truck->user->profile->driver_license_image_url
+			 );
+			array_push($return_trucks, $return_truck);
+
+		}
+		
+		
 		return json_encode ( array (
 				'result_code' => '0',
-				'trucks' => $trucks 
+				'trucks' => $return_trucks 
 		) );
 	}
 	
@@ -229,7 +265,7 @@ class TruckController extends BaseController {
 		$data ['truck_plate'] = Input::get ( 'truck_plate' );
 		$data ['name'] = Input::get ( 'name' ); // update in profile
 		$data ['truck_mobile'] = Input::get ( 'truck_mobile' ); // update in truck
-		                                                      
+		                                                        
 		// set truck audit status as 0
 		$resultCode1 = $this->trucks->sendTruckToAuditFromMobile ( $data );
 		
